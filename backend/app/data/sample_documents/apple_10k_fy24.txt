@@ -1,0 +1,29 @@
+UNITED STATES SECURITIES AND EXCHANGE COMMISSION
+WASHINGTON, D.C. 20549
+FORM 10-K
+ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934
+For the fiscal year ended September 28, 2024
+
+APPLE INC.
+(Exact name of Registrant as specified in its charter)
+One Apple Park Way, Cupertino, California 95014
+
+PART I - ITEM 1. BUSINESS
+Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables and accessories, and sells a variety of related services.
+
+PART II - ITEM 7. MANAGEMENT'S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+Executive Overview
+Total net sales were $94.93 billion for the fourth quarter of fiscal 2024, an increase of 6% or $5.43 billion compared to the prior year quarter. Full-year net sales reached $391.04 billion. The increase was driven by strong consumer demand across the iPhone and Services segments.
+
+Operating Performance
+Gross margin for the quarter was $43.88 billion, representing a gross margin percentage of 46.2%. The operating margin expanded to 30.5% driven by operational leverage and favorable services mix. Operating income for the period stood at $29.59 billion compared to $26.97 billion in the fourth quarter of fiscal 2023.
+
+Net income for the quarter was $21.45 billion compared to prior year net income of $22.96 billion, with the variance reflecting an income tax charge related to the reversal of the European Union State Aid decision. Diluted earnings per share was $1.40. Adjusted EBITDA stood at $32.10 billion.
+
+Liquidity and Capital Resources
+Cash and cash equivalents, along with marketable securities, totaled $29.9 billion at the end of the period. Total commercial paper and term debt totaled $106.63 billion. Free cash flow generation remained strong at $26.8 billion for the quarter. During the quarter, the Company returned over $29 billion to shareholders through dividends and share repurchases.
+
+ITEM 1A. RISK FACTORS
+- Foreign exchange headwinds dampened gross margin by approximately 120 basis points due to the strengthening U.S. dollar against foreign currencies.
+- Global regulatory scrutiny continues to expand, including compliance obligations under the European Union Digital Markets Act and antitrust inquiries in multiple jurisdictions.
+- Supply chain logistics and component concentration in specialized display and system-on-a-chip packaging remain sensitive to regional geopolitical disruptions.

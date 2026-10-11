@@ -1,0 +1,19 @@
+CONFIDENTIAL INVESTMENT MEMORANDUM
+PROJECT ZEPHYR - STRIPE INC. SERIES I LIQUIDITY & GROWTH ASSESSMENT
+Date: March 15, 2024
+
+1. EXECUTIVE SUMMARY & COMPANY BACKGROUND
+Stripe, Inc. provides economic infrastructure for the internet, operating a developer-first financial platform that handles payments, billing, treasury, and banking-as-a-service. This memorandum reviews financial milestones for fiscal year 2023 in conjunction with the $65 billion private valuation round.
+
+2. FINANCIAL PERFORMANCE & CORE UNIT ECONOMICS
+- Total Payment Volume (TPV): Surpassed $1.01 trillion in total payment volume, representing a 25% year-over-year growth rate.
+- Net Revenue: Total net revenue expanded to $4.20 billion, up 31% year-over-year from $3.21 billion.
+- Gross Margin: Maintained gross margin of 78.4% on payments gross profit margin.
+- Operating Income & EBITDA: Achieved adjusted EBITDA of $1.15 billion, demonstrating dramatic inflection from adjusted EBITDA breakeven in fiscal year 2022. Operating margin settled at 22.8%.
+- Free Cash Flow: Generated positive free cash flow of $820 million for the year.
+- Liquidity Position: Cash and cash equivalents stood at $3.85 billion with minimal long-term funded debt ($450 million term debt facility).
+
+3. KEY INVESTMENT RISKS & MITIGANTS
+- Payment Processing Interchange Exposure: Regulatory caps on debit card swipe fees (Durbin Amendment extensions) could compress net take rate by 5-10 bps.
+- Counterparty & Fraud Losses: Credit and dispute risk from merchant insolvencies during macroeconomic downturns.
+- Mitigation: Proprietary machine learning fraud engine (Radar) has reduced fraud dispute rates to less than 0.08% of transaction volume.

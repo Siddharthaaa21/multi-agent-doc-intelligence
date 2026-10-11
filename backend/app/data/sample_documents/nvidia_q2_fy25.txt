@@ -1,0 +1,24 @@
+UNITED STATES SECURITIES AND EXCHANGE COMMISSION
+WASHINGTON, D.C. 20549
+FORM 10-Q
+QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934
+For the quarterly period ended July 28, 2024
+
+NVIDIA CORPORATION
+2788 San Tomas Expressway, Santa Clara, California 95051
+
+PART I. FINANCIAL INFORMATION
+ITEM 1. FINANCIAL STATEMENTS
+
+CONSOLIDATED STATEMENTS OF INCOME (UNAUDITED)
+NVIDIA reported record quarterly revenue of $30.04 billion for the second quarter of fiscal 2025, up 15% from the previous quarter and up 122% from a year ago.
+Data Center revenue was $26.3 billion, up 16% sequentially and up 154% from a year ago, fueled by intense global demand for the Hopper architecture computing platform.
+
+GAAP gross margin for the quarter was 75.1%, compared with 70.1% a year ago. Operating income was $18.64 billion, up 174% year-over-year. Operating margin reached 62.1%. Adjusted EBITDA stood at $19.45 billion. Net income reached $16.60 billion, or $0.67 per diluted share, up 168% from $6.18 billion a year ago. Free cash flow for the second quarter was $13.48 billion, compared with $6.05 billion in the prior year period.
+
+Cash, cash equivalents and marketable securities were $34.80 billion at quarter end, compared with $25.98 billion at the end of fiscal 2024. Total debt stood at $8.46 billion.
+
+MANAGEMENT COMMENTARY & RISK APPRAISAL
+- Supply chain constraints in advanced packaging have moderated fulfillment velocity, specifically TSMC CoWoS packaging capacity allocations.
+- Evolving export controls and trade restrictions imposed by the U.S. government regarding advanced semiconductor chips to specified markets.
+- High customer concentration: a small number of cloud service providers and hyperscalers account for a substantial percentage of total Data Center revenue.

@@ -1,12 +1,14 @@
 # Multi-Agent Workflow & Document Intelligence Orchestrator
 
+[![CI Pipeline](https://github.com/Siddharthaaa21/multi-agent-doc-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/Siddharthaaa21/multi-agent-doc-intelligence/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/Orchestrator-LangGraph%20v0.2-orange.svg)](https://github.com/langchain-ai/langgraph)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/Frontend-React%20%2B%20Tailwind%20v4-61DAFB.svg)](https://react.dev/)
 [![Docker](https://img.shields.io/badge/Container-Docker%20Compose-2496ED.svg)](https://www.docker.com/)
-[![Evaluation Suite](https://img.shields.io/badge/Regression%20Pass%20Rate-99.2%25-brightgreen.svg)](#-automated-regression-evaluation-pipeline)
-[![Turnaround Reduction](https://img.shields.io/badge/Manual%20Turnaround%20Reduction-60%25-success.svg)](#-key-capabilities)
+[![Regression Pass Rate](https://img.shields.io/badge/Regression%20Pass%20Rate-99.2%25-brightgreen.svg)](#-automated-regression-evaluation-pipeline)
+[![Architecture](https://img.shields.io/badge/Architecture-System%20Design-blueviolet.svg)](ARCHITECTURE.md)
 
 > **Autonomous multi-agent research tool and document intelligence orchestrator for unstructured financial filings (10-K, 10-Q, earnings calls, M&A memos, credit underwriting facilities). Features a cyclic LangGraph state machine with adversarial hallucination guardrails, an interactive analyst dashboard, and an automated regression evaluation pipeline achieving a 99.2% pass rate.**
 
@@ -100,10 +102,10 @@ Ensure Docker and Docker Compose are installed:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/multi-agent-doc-intelligence.git
+git clone https://github.com/Siddharthaaa21/multi-agent-doc-intelligence.git
 cd multi-agent-doc-intelligence
 
-# Launch containers
+# Launch containers via Docker Compose
 docker compose up --build
 ```
 - **Internal Analyst Dashboard**: [http://localhost:3000](http://localhost:3000)
@@ -112,7 +114,18 @@ docker compose up --build
 
 ---
 
-### Option 2: Local Development Setup
+### Option 2: 1-Command Makefile Quickstart
+
+```bash
+make install     # Install Python backend dependencies & npm frontend dependencies
+make test        # Run backend test suite (pytest)
+make eval        # Run 25-scenario automated regression evaluation harness
+make dev         # Run FastAPI (:8000) and React (:3000) concurrently
+```
+
+---
+
+### Option 3: Manual Local Development Setup
 
 #### 1. Backend Setup
 ```bash

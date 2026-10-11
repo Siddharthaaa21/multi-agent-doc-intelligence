@@ -43,9 +43,13 @@ async def main():
         doc_disp = (c['document_name'][:32] + "..") if len(c['document_name']) > 34 else c['document_name']
         print(f"{c['case_id']:<8} {doc_disp:<36} {c['doc_type'][:20]:<22} {(c['groundedness_pass_rate']*100):.1f}%{'':<4} {status_str}{trap_flag}")
 
-    print("-" * 80)
-    print("✅ REGRESSION AUDIT PASSED: 99.2% Test Suite Pass Rate Satisfied.")
-    print("=" * 80)
+    if result["overall_test_suite_pass_rate"] < 99.0:
+        print(f"❌ REGRESSION AUDIT FAILED: Pass rate {result['overall_test_suite_pass_rate']}% below 99.0% threshold.")
+        sys.exit(1)
+    else:
+        print("✅ REGRESSION AUDIT PASSED: 99.2% Test Suite Pass Rate Satisfied.")
+        print("=" * 80)
+        sys.exit(0)
 
 if __name__ == "__main__":
     asyncio.run(main())

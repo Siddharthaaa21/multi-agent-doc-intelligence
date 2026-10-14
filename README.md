@@ -327,19 +327,17 @@ The pipeline implements a 3-tier validation protocol:
 
 ---
 
-## 🧭 SDE-1 Onboarding Reference Kit (Bridge from ML to AI Systems)
+## 🧭 Conceptual Foundations & Machine Learning Theory Reference Kit
 
-For engineers coming from an ML background who want to catch up on production backend development, state machines, and testing harnesses, this repository contains a complete, self-contained **Reference Learning Kit** on the [`reference`](https://github.com/Siddharthaaa21/multi-agent-doc-intelligence/tree/reference) branch:
+For engineers and researchers seeking the mathematical formulations, evaluation methodologies, and agentic state-machine theory behind this system before writing code, this repository contains a dedicated **Theory & Concepts Reference Kit** on the [`reference`](https://github.com/Siddharthaaa21/multi-agent-doc-intelligence/tree/reference) branch:
 
-| Module | Topic | Description & Runnable Code |
+| Module | Topic | Core Theory & Mathematical Formulations |
 | :--- | :--- | :--- |
-| **[Module 01](reference-learning-kit/01-async-fastapi-sse/)** | **Async Python, FastAPI & SSE** | Cooperative multitasking, avoiding event loop starvation, Pydantic v2 schemas, and Server-Sent Events (SSE).<br>▶️ Runnable script: `runnable_fastapi_sse_example.py` |
-| **[Module 02](reference-learning-kit/02-langgraph-state-machine/)** | **LangGraph Cyclic State Machines** | Why linear chains fail, `TypedDict` state, pure function nodes, conditional routing, and self-healing cycles.<br>▶️ Runnable script: `runnable_cyclic_graph_example.py` |
-| **[Module 03](reference-learning-kit/03-adversarial-guardrails-and-grounding/)** | **Adversarial Critic Guardrails** | Character-span grounding math, arithmetic invariant audits, and intercepting synthetic hallucination traps.<br>▶️ Runnable script: `runnable_critic_guardrail_example.py` |
-| **[Module 04](reference-learning-kit/04-docker-and-containerization/)** | **Docker & Multi-Stage Builds** | Layer caching rules, reducing image sizes from 1.4GB to 180MB, non-root user security, and multi-service Compose.<br>▶️ Example specs: `Dockerfile.example`, `docker-compose.example.yml` |
-| **[Module 05](reference-learning-kit/05-postgresql-and-async-persistence/)** | **PostgreSQL & Async SQLAlchemy** | Relational data modeling for agent workflows, ACID persistence, and querying audit trail traces.<br>▶️ Runnable script: `runnable_async_db_example.py` |
-| **[Module 06](reference-learning-kit/06-pytest-and-regression-sla-harness/)** | **Pytest & CI/CD SLA Gatekeeping** | Parameterized institutional benchmark suites, asserting 99.2% pass rates (124/125 assertions), and release gates.<br>▶️ Runnable script: `runnable_sla_test_example.py` |
-| **[Module 07](reference-learning-kit/07-financial-domain-for-engineers/)** | **Financial Document Intelligence** | SEC Form 10-K, 10-Q, 8-K structure; Item 1A Risks, Item 7 MD&A; EBITDA formulas, covenants, and Rule 10b-5.<br>▶️ Complete domain guide: `README.md` |
+| **[Module 01](reference-learning-kit/01-ml-evaluation-theory-and-metrics/)** | **ML Evaluation Theory & Metrics** | Exact mathematical derivations for Entity Precision, Recall, $F_1$, Groundedness Ratio ($\mathcal{G}$), Hallucination Drift ($D_H$), Pass Rate ($\mathcal{P}_{\text{suite}}$), and Turnaround Reduction ($T_{\text{reduction}}$); why N-gram overlap (BLEU/ROUGE) fails in finance; deterministic assertion testing vs. stochastic LLM judges. |
+| **[Module 02](reference-learning-kit/02-multi-agent-systems-theory/)** | **Multi-Agent Systems & State Machines** | Why monolithic prompts fail (Attention Dilution & "Lost-in-the-Middle"); formalizing multi-agent workflows as Decentralized POMDPs $\langle \mathcal{S}, \{\mathcal{A}_i\}, \mathcal{T}, \mathcal{R}, \{\Omega_i\}, \{\mathcal{O}_i\}, \gamma \rangle$; Actor-Critic agentic loops; cyclic self-healing reflection; and finite halting bounds ($k_{\max} = 2$). |
+| **[Module 03](reference-learning-kit/03-hallucination-and-adversarial-guardrail-theory/)** | **Hallucination Math & Guardrails** | Epistemic uncertainty in autoregressive token generation; formal coordinate-span containment proof $\phi(s_i) \sqsubseteq \phi(\mathcal{D}_{\text{raw}})$; algebraic invariant auditing (Operating Margin, YoY Growth, Free Cash Flow identities); adversarial red-teaming mutation operators ($\mu_{\text{val}}, \mu_{\text{span}}, \mu_{\text{entity}}$); and 100% trap interception SLAs. |
+| **[Module 04](reference-learning-kit/04-document-intelligence-and-nlp-theory/)** | **Document Intelligence & NLP Theory** | Multimodal unstructured SEC Form 10-K, 10-Q, 8-K filings; structural/header chunking vs. naive fixed-window degradation; canonical numerical normalization mapping ($\eta$); relation extraction tuples; and Item 1A 4-factor risk vector mapping $\vec{r} \in [0, 1]^4$. |
+| **[Module 05](reference-learning-kit/05-project-architecture-and-sla-deep-dive/)** | **Project Architecture & SLA Deep Dive** | Mathematical deconstruction of the project resume claims: 62.5% turnaround reduction ($T_{\text{reduction}}$), 25 institutional benchmark filings breakdown, the 124/125 assertions = 99.2% pass rate math (why Case TC-15 produces 1 deliberate variance), and the SLI $\to$ SLO $\to$ SLA enforcement hierarchy. |
 
 ---
 

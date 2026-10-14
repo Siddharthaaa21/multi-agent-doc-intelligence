@@ -1,74 +1,82 @@
-# 🧭 SDE-1 AI Systems Engineering Master Learning Kit
-### Multi-Agent Document Intelligence & Financial Risk Orchestrator
+# 🧠 Machine Learning & Multi-Agent Theory Reference Kit
+### Autonomous Document Intelligence & Financial Risk Orchestrator
 
-Welcome! This kit is specifically structured for **ML engineers and data scientists transitioning into Software Development Engineering (SDE-1 / AI Systems Engineering)**.
+This reference kit provides **pure conceptual, mathematical, and algorithmic documentation** designed to establish deep domain mastery before writing or modifying any implementation code.
 
-If you already understand machine learning (embeddings, attention, loss functions, token generation), but your backend development skills are rusty or you haven't built asynchronous microservices and production test harnesses before, this kit bridges that exact gap.
-
----
-
-## 🎯 The Mental Shift: ML Mindset vs. SDE-1 AI Systems Mindset
-
-| Dimension | Machine Learning Mindset | SDE-1 / AI Systems Engineering Mindset |
-| :--- | :--- | :--- |
-| **Execution Environment** | Jupyter Notebooks, script runs, ad-hoc execution | Async event loops (`asyncio`), stateless containers, connection pools |
-| **Data Contracts** | Loose Python dicts, NumPy arrays, pandas DataFrames | Strict schema validation with Pydantic v2 and TypeScript interfaces |
-| **Control Flow** | Sequential steps or linear DAGs (LangChain LCEL) | Deterministic cyclic state machines with dynamic self-healing (LangGraph) |
-| **Error Handling** | Model output tolerance, probabilistic variance | Fail-fast validation, adversarial critic guardrails, bounded retry loops |
-| **Testing & Quality** | Train/Validation loss, test set accuracy (probabilistic) | Automated regression test suites, zero-defect SLA gates, CI/CD blockers |
-| **Deployment** | "It ran on my GPU workstation" | Multi-stage Docker containers, Docker Compose, automated GitHub Actions |
-| **Persistence** | Pickled checkpoints (`.pt`, `.pkl`) | ACID relational storage (PostgreSQL), audit trails, event replay logs |
+If you are an engineer or researcher with a machine learning background, this curriculum focuses on **evaluation theory, mathematical formulations, agentic state-machine dynamics, and continuous regression testing**.
 
 ---
 
-## 🗺️ Master Curriculum Roadmap
+## 🗺️ Conceptual Syllabus & Theory Modules
 
-| Module | Core Concepts & Engineering Patterns | Runnable Code Example | Target Project Component |
-| :--- | :--- | :--- | :--- |
-| [**01. Async FastAPI & SSE**](./01-async-fastapi-sse/README.md) | `asyncio` event loop, cooperative concurrency, Pydantic v2 schemas, Server-Sent Events (SSE) streaming | [`runnable_fastapi_sse_example.py`](./01-async-fastapi-sse/runnable_fastapi_sse_example.py) | `backend/app/main.py`, `backend/app/api/` |
-| [**02. LangGraph State Machine**](./02-langgraph-state-machine/README.md) | `StateGraph`, `TypedDict` state, pure node transitions, conditional routing edges, cyclic self-healing loops | [`runnable_cyclic_graph_example.py`](./02-langgraph-state-machine/runnable_cyclic_graph_example.py) | `backend/app/orchestrator/graph.py` |
-| [**03. Adversarial Guardrails**](./03-adversarial-guardrails-and-grounding/README.md) | Character-span anchoring, exact/fuzzy substring matching, arithmetic invariant audits, adversarial trap injection | [`runnable_critic_guardrail_example.py`](./03-adversarial-guardrails-and-grounding/runnable_critic_guardrail_example.py) | `backend/app/agents/guardrail_agent.py` |
-| [**04. Docker & Containerization**](./04-docker-and-containerization/README.md) | Multi-stage container builds, non-root users, layer caching, Docker Compose multi-service networks | [`Dockerfile.example`](./04-docker-and-containerization/Dockerfile.example), [`docker-compose.example.yml`](./04-docker-and-containerization/docker-compose.example.yml) | `Dockerfile`, `docker-compose.yml` |
-| [**05. PostgreSQL & Persistence**](./05-postgresql-and-async-persistence/README.md) | Relational modeling for agent workflows, async SQLAlchemy 2.0, audit log persistence, connection pooling | [`runnable_async_db_example.py`](./05-postgresql-and-async-persistence/runnable_async_db_example.py) | Database layer, job state storage |
-| [**06. Pytest & CI/CD SLA Harness**](./06-pytest-and-regression-sla-harness/README.md) | Unit vs integration vs regression testing, conftest fixtures, mock providers, asserting 99.2% pass rates | [`runnable_sla_test_example.py`](./06-pytest-and-regression-sla-harness/runnable_sla_test_example.py) | `backend/tests/`, `eval_runner.py`, CI |
-| [**07. Financial Filings Domain Guide**](./07-financial-domain-for-engineers/README.md) | 10-K, 10-Q, 8-K structure; Item 1A Risks, Item 7 MD&A; EBITDA, leverage covenants; why hallucinations are fatal | Domain reference guide & checklist | Financial extraction prompts & benchmark data |
-
----
-
-## ⚡ Quick Start: Running the Examples
-
-All Python example files in this kit are self-contained and runnable using the repository virtual environment:
-
-```bash
-# 1. Activate the environment
-cd /Users/siddhartha/Desktop/internal-project-stuff/ai-agentic-systems/multi-agent-doc-intelligence
-source backend/venv/bin/activate
-
-# 2. Run Module 01 (Async FastAPI & SSE Streaming)
-python reference-learning-kit/01-async-fastapi-sse/runnable_fastapi_sse_example.py
-
-# 3. Run Module 02 (LangGraph Cyclic State Machine)
-python reference-learning-kit/02-langgraph-state-machine/runnable_cyclic_graph_example.py
-
-# 4. Run Module 03 (Adversarial Critic Guardrails)
-python reference-learning-kit/03-adversarial-guardrails-and-grounding/runnable_critic_guardrail_example.py
-
-# 5. Run Module 05 (Async SQLAlchemy Persistence)
-python reference-learning-kit/05-postgresql-and-async-persistence/runnable_async_db_example.py
-
-# 6. Run Module 06 (Regression Evaluation Harness with Pytest)
-python -m pytest reference-learning-kit/06-pytest-and-regression-sla-harness/runnable_sla_test_example.py -v
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                               THEORETICAL FOUNDATIONS                                  │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ [Module 01: ML Evaluation Theory, Formulations & Testing Methodology]                  │
+│ • Mathematical definitions: Precision, Recall, F1, Groundedness Ratio, Faithfulness   │
+│ • Why N-gram metrics (BLEU/ROUGE) fail on financial filings                            │
+│ • Deterministic assertion suites vs. stochastic LLM-as-a-judge                        │
+│ • Stratified golden benchmark dataset creation & inter-annotator agreement (Kappa)     │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ [Module 02: Multi-Agent Systems Theory, State Machines & Cognitive Architectures]      │
+│ • Why single-prompt LLMs fail: Context window saturation & Attention Dilution          │
+│ • Mathematical formalism: Agent pipelines as Partially Observable MDPs (POMDPs)       │
+│ • The Actor-Critic paradigm in agentic workflows                                       │
+│ • Cyclic state graphs, self-healing reflection, and finite halting guarantees          │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ [Module 03: The Mathematics of Hallucination & Adversarial Verification Guardrails]    │
+│ • Epistemic uncertainty, exposure bias, and compounding hallucination drift            │
+│ • Coordinate-based character-span grounding mathematics                                │
+│ • Algebraic invariant auditing (Operating Margin, YoY Growth, Free Cash Flow)          │
+│ • Adversarial red-teaming: Synthetic perturbation operators & 100% interception SLAs   │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ [Module 04: Document Intelligence, Structural Chunking & Financial NLP Theory]         │
+│ • Multimodal challenges of SEC Form 10-K, 10-Q, 8-K filings                            │
+│ • Structural chunking vs. naive fixed-size window chunking (context boundary loss)     │
+│ • Information extraction (IE): Canonical numerical scalar normalization               │
+│ • Multi-factor risk mapping & MD&A management sentiment analysis                       │
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ [Module 05: Project Architecture, SLA Engineering & Resume Deconstruction]             │
+│ • Mathematical deconstruction of the project resume claims                             │
+│ • Turnaround time reduction analysis: 300s baseline vs. 1.84s pipeline (62.5% savings) │
+│ • The 25 institutional benchmark scenarios breakdown                                   │
+│ • The 124/125 assertions = 99.2% pass rate math (Why TC-15 creates 1 deliberate error) │
+│ • The SLI ➔ SLO ➔ SLA institutional contract hierarchy                                │
+└────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🏗️ How This Codebase Solves Real-World Production Challenges
+## 📚 Module Directory Links
 
-1. **Why LangGraph instead of simple sequential chains?**
-   Sequential chains fail whenever extraction extracts numbers that don't match the source text or violate accounting equations. LangGraph introduces **cycles**: an adversarial critic catches the error and sends the state back to a refinement node to fix it before final synthesis.
+1. **[Module 01: ML Evaluation Theory, Formulations & Testing Methodology](./01-ml-evaluation-theory-and-metrics/README.md)**
+   *Formulas: Entity Precision, Entity Recall, $F_1$, Groundedness Ratio $\mathcal{G}$, Hallucination Drift $D_H$, Pass Rate $\mathcal{P}_{\text{suite}}$, Turnaround Reduction $T_{\text{reduction}}$.*
 
-2. **Why Server-Sent Events (SSE) instead of WebSockets?**
-   Multi-agent tasks take between 1 to 5 seconds. Streaming agent thought logs, extraction events, and guardrail decisions unidirectionally over standard HTTP/2 with SSE is far simpler, more reliable, and firewall-friendly than stateful bi-directional WebSockets.
+2. **[Module 02: Multi-Agent Systems Theory, State Machines & Cognitive Architectures](./02-multi-agent-systems-theory/README.md)**
+   *Theory: POMDP formulation $\langle \mathcal{S}, \mathcal{A}, \mathcal{T}, \mathcal{R}, \Omega, \mathcal{O}, \gamma \rangle$, attention degradation, Actor-Critic agentic loops, cyclic self-healing, finite halting bounds.*
 
-3. **Why an Automated Regression Evaluation Harness?**
-   In enterprise finance, "prompt changes" can silently degrade performance on edge-case filings. The 25-scenario evaluation harness validates 125 assertions on every commit. If pass rate drops below 99.0%, the CI pipeline aborts release.
+3. **[Module 03: The Mathematics of Hallucination & Adversarial Verification Guardrails](./03-hallucination-and-adversarial-guardrail-theory/README.md)**
+   *Formulas: Substring grounding proofs $\phi(s_i) \sqsubseteq \phi(\mathcal{D}_{\text{raw}})$, algebraic margin invariants $|\Delta| \le \epsilon$, adversarial mutation operators $\mu(c)$, 100% trap interception.*
+
+4. **[Module 04: Document Intelligence, Structural Chunking & Financial NLP Theory](./04-document-intelligence-and-nlp-theory/README.md)**
+   *Theory: Section header parsing (Item 1A, Item 7, Item 8), tabular block preservation, numerical normalization $\eta(\text{token})$, multi-factor risk vectors $\vec{r} \in [0, 1]^4$, MD&A sentiment scoring.*
+
+5. **[Module 05: Project Architecture, SLA Engineering & Resume Deconstruction](./05-project-architecture-and-sla-deep-dive/README.md)**
+   *Deep Dive: The 5 agent personas, the 25 benchmark filings, the 125 assertions breakdown, why Case TC-15 yields 99.2% pass rate, and how CI/CD enforces contractual zero-defect SLAs.*
+
+---
+
+## 🎯 Conceptual Questions to Master Before Building
+
+Before writing or modifying implementation code, ensure you can conceptually answer:
+1. **Why does ROUGE/BLEU fail completely for financial extraction?**
+   *(See Module 01: Negation inversion creates high token overlap despite opposite financial meaning).*
+2. **Why do linear LangChain pipelines suffer from exponential hallucination compounding?**
+   *(See Module 02: $D_H^{(t)} \approx 1 - (1-\delta)^t$; without a cyclic critic, errors compound at each step).*
+3. **How does the system mathematically prove a number is not hallucinated?**
+   *(See Module 03: By verifying character-span containment $s_i \subseteq \mathcal{D}_{\text{raw}}$ and algebraic accounting equations).*
+4. **Why does naive sliding-window chunking destroy financial tables?**
+   *(See Module 04: It decouples header definitions from numerical cells and footnotes).*
+5. **How is the 99.2% pass rate calculated across the 25 benchmark cases?**
+   *(See Module 05: 25 cases $\times$ 5 assertions = 125 assertions. Case TC-15 introduces 1 intentional non-fatal variance; $124/125 = 99.2\%$).*

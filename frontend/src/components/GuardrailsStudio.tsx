@@ -97,7 +97,7 @@ export const GuardrailsStudio: React.FC<GuardrailsStudioProps> = ({
       </div>
 
       {/* Adversarial Stress Test Interactive Banner */}
-      <div className="bg-gradient-to-r from-amber-950/40 via-slate-900/90 to-slate-950 border border-amber-800/50 rounded-xl p-5 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
             <AlertTriangle className="h-4 w-4 text-amber-400" />

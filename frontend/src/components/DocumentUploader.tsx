@@ -147,10 +147,10 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           type="button"
           onClick={onRunWorkflow}
           disabled={isRunning || !rawText.trim()}
-          className={`flex items-center space-x-2 px-5 py-2.5 rounded-lg text-xs font-semibold tracking-wide uppercase shadow-lg transition-all cursor-pointer ${
+          className={`flex items-center space-x-2 px-5 py-2.5 rounded-lg text-xs font-semibold tracking-wide uppercase transition-all cursor-pointer ${
             isRunning || !rawText.trim()
               ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
-              : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-600/30'
+              : 'bg-blue-600 hover:bg-blue-500 text-white border border-blue-500/50 shadow-sm'
           }`}
         >
           <Play className={`h-4 w-4 ${isRunning ? 'animate-spin' : ''}`} />

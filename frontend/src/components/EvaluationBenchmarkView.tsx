@@ -43,7 +43,7 @@ export const EvaluationBenchmarkView: React.FC<EvaluationBenchmarkViewProps> = (
           type="button"
           onClick={onRunSuite}
           disabled={isLoading}
-          className="flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-lg text-xs font-semibold uppercase tracking-wider shadow-lg shadow-purple-600/20 transition cursor-pointer"
+          className="flex items-center space-x-2 px-5 py-2.5 bg-purple-700 hover:bg-purple-600 text-white border border-purple-500/40 rounded-lg text-xs font-semibold uppercase tracking-wider transition cursor-pointer"
         >
           <Play className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
           <span>{isLoading ? 'Running 25 Test Cases...' : 'Execute Regression Suite'}</span>

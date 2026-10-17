@@ -13,8 +13,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, llmProv
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center space-x-3">
-          <div className="h-9 w-9 rounded-lg bg-gradient-to-tr from-blue-600 via-indigo-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <Cpu className="h-5 w-5 text-white" />
+          <div className="h-9 w-9 rounded-lg bg-slate-900 border border-slate-700/80 flex items-center justify-center text-blue-400">
+            <Cpu className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center space-x-2">

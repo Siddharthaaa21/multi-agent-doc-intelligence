@@ -13,8 +13,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent / "backend"))
 
 from app.evaluation.evaluator import evaluator
+from app.db.session import init_db
 
 async def main():
+    # Ensure database schema is ready
+    await init_db()
+
     print("=" * 80)
     print("🚀 STRATA MULTI-AGENT ORCHESTRATOR // AUTOMATED REGRESSION EVALUATION")
     print("   Evaluating 25 Benchmark Cases & Adversarial Hallucination Injection Traps")
@@ -22,6 +26,7 @@ async def main():
     print()
 
     result = await evaluator.run_suite()
+
 
     print(f"📊 EVALUATION SUMMARY (Completed at {result['evaluated_at']}):")
     print(f"   • Total Cases Evaluated:       {result['total_cases_evaluated']}")

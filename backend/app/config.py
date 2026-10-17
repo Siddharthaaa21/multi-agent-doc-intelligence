@@ -34,6 +34,9 @@ class Settings:
     GUARDRAIL_CONFIDENCE_THRESHOLD: float = float(os.getenv("GUARDRAIL_CONFIDENCE_THRESHOLD", "0.95"))
     MAX_REFINEMENT_LOOPS: int = int(os.getenv("MAX_REFINEMENT_LOOPS", "2"))
     
+    # Database Settings (PostgreSQL / Async SQLAlchemy)
+    DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite+aiosqlite:///{BASE_DIR}/orchestrator.db")
+    
     # CORS
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5173", "*"]
 

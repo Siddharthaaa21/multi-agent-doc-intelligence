@@ -74,3 +74,19 @@ async def stream_job_updates(job_id: str):
         runner.stream_job_events(job_id),
         media_type="text/event-stream"
     )
+
+@router.get("/jobs")
+async def list_persisted_jobs(limit: int = 50, offset: int = 0):
+    """List historical analysis jobs from the relational database."""
+    from app.db.repository import repo
+    jobs = await repo.list_jobs(limit=limit, offset=offset)
+    return {"total": len(jobs), "jobs": jobs}
+
+@router.get("/audit/{job_id}")
+async def get_job_audit_trail(job_id: str):
+    """Retrieve detailed compliance audit trail with entity-level traces and metrics."""
+    audit_data = await runner.get_job_audit(job_id)
+    if not audit_data:
+        raise HTTPException(status_code=404, detail="Audit trail for job not found")
+    return audit_data
+

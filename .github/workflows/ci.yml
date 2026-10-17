@@ -31,10 +31,14 @@ jobs:
           pip install -r backend/requirements.txt
 
       - name: Run Pytest Test Suite
+        env:
+          PYTHONPATH: backend
         run: |
           pytest -v backend/tests
 
       - name: Run 25-Case Regression Evaluation Benchmark
+        env:
+          PYTHONPATH: backend
         run: |
           python eval_runner.py
 

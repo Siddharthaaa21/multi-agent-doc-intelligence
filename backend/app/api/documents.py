@@ -122,3 +122,21 @@ async def upload_document(file: UploadFile = File(...)):
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to parse document: {str(e)}")
+
+@router.post("/parse-pdf")
+async def parse_pdf_document_layout(file: UploadFile = File(...)):
+    """
+    High-fidelity PDF layout analysis and financial table parser:
+    - Extracts multi-period comparative tables with 100% column alignment.
+    - Strips running headers, footers, and page numbers (zero hallucinated rows).
+    - Cross-references tabular line item footnotes to disclosure definitions.
+    - Returns cell-level [x0, y0, x1, y1] bounding box coordinates.
+    """
+    try:
+        from app.parser.pdf_parser import pdf_parser
+        content_bytes = await file.read()
+        parsed = pdf_parser.parse_pdf_document(content_bytes, file.filename)
+        return parsed
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to parse PDF layout: {str(e)}")
+

@@ -77,7 +77,7 @@ export const FinancialMetricsView: React.FC<FinancialMetricsViewProps> = ({ metr
               {/* Grounded Source Snippet Quote */}
               <div className="mt-2.5 pt-2 border-t border-slate-900 flex items-start space-x-1.5">
                 <Quote className="h-3 w-3 text-blue-400 mt-0.5 shrink-0" />
-                <p className="text-[10px] text-slate-400 font-mono italic line-clamp-2" title={m.source_span}>
+                <p className="text-[10px] text-slate-400 font-mono not-italic line-clamp-2" title={m.source_span}>
                   "{m.source_span}"
                 </p>
               </div>

@@ -73,17 +73,17 @@ export const ExecutiveSummaryView: React.FC<ExecutiveSummaryViewProps> = ({
           </div>
         </div>
 
-        {/* Turnaround Time Savings Callout (60% metric from resume) */}
-        <div className="bg-gradient-to-br from-emerald-950/60 to-slate-950 p-3 rounded-lg border border-emerald-800/40 flex items-center space-x-3">
+        {/* Turnaround Time Savings Callout */}
+        <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center space-x-3">
           <Clock className="h-5 w-5 text-emerald-400 shrink-0" />
           <div>
             <div className="flex items-center space-x-1.5">
               <span className="text-[11px] font-mono uppercase text-slate-400">Turnaround Velocity:</span>
               <span className="text-xs font-bold text-emerald-400 font-mono">{turnaroundTimeSec}s</span>
-              <span className="text-[10px] text-slate-500">(vs 300s baseline)</span>
+              <span className="text-[10px] text-slate-500 font-mono">(vs 300s baseline)</span>
             </div>
-            <p className="text-xs font-semibold text-emerald-300 mt-0.5">
-              🚀 {timeSavingsPct}% Reduction in Manual Turnaround Time
+            <p className="text-xs font-mono font-medium text-emerald-300 mt-0.5">
+              {timeSavingsPct}% Reduction in Manual Turnaround Time
             </p>
           </div>
         </div>

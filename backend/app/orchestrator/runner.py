@@ -73,6 +73,13 @@ class OrchestratorRunner:
             time_savings_pct = round(((manual_baseline - total_time) / manual_baseline) * 100, 1)
             state["turnaround_reduction_pct"] = max(55.0, min(85.0, time_savings_pct))
 
+            # Persist to relational database
+            try:
+                from app.db.repository import repo
+                await repo.update_completed_job(job_id, state)
+            except Exception as db_err:
+                logger.warning(f"Could not persist completed job {job_id} to database: {db_err}")
+
         except Exception as e:
             logger.error(f"Error executing job {job_id}: {e}", exc_info=True)
             state["status"] = "failed"
@@ -121,6 +128,13 @@ class OrchestratorRunner:
             time_savings_pct = round(((manual_baseline - total_time) / manual_baseline) * 100, 1)
             state["turnaround_reduction_pct"] = max(58.0, min(80.0, time_savings_pct))
 
+            # Persist to relational database
+            try:
+                from app.db.repository import repo
+                await repo.update_completed_job(job_id, state)
+            except Exception as db_err:
+                logger.warning(f"Could not persist streamed job {job_id} to database: {db_err}")
+
             final_payload = {
                 "event": "completed",
                 "job_id": job_id,
@@ -132,4 +146,17 @@ class OrchestratorRunner:
             logger.error(f"Error in SSE stream for job {job_id}: {e}")
             yield f"data: {json.dumps({'event': 'error', 'error': str(e)})}\n\n"
 
+    @classmethod
+    async def get_job_audit(cls, job_id: str) -> Optional[Dict[str, Any]]:
+        """Retrieve complete audit trail and metrics from database with memory fallback."""
+        try:
+            from app.db.repository import repo
+            db_data = await repo.get_job_by_id(job_id)
+            if db_data:
+                return db_data
+        except Exception as e:
+            logger.warning(f"Failed to fetch job {job_id} from database: {e}")
+        return JOB_STORE.get(job_id)
+
 runner = OrchestratorRunner()
+

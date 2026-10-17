@@ -1,10 +1,12 @@
 import logging
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.api.documents import router as documents_router
 from app.api.orchestrator import router as orchestrator_router
 from app.api.evaluation import router as evaluation_router
+from app.db.session import init_db
 
 # Configure logging
 logging.basicConfig(
@@ -13,11 +15,21 @@ logging.basicConfig(
 )
 logger = logging.getLogger("doc_orchestrator")
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan event handler initializing database schemas on startup."""
+    logger.info("Initializing relational database tables...")
+    await init_db()
+    yield
+    logger.info("Application shutdown complete.")
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Multi-Agent Document Intelligence Orchestrator using LangGraph, FastAPI, and Automated Regression Guardrails."
+    description="Multi-Agent Document Intelligence Orchestrator using LangGraph, FastAPI, and Automated Regression Guardrails.",
+    lifespan=lifespan
 )
+
 
 # CORS Middleware
 app.add_middleware(

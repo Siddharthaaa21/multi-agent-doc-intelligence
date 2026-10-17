@@ -37,6 +37,10 @@ class Settings:
     # Database Settings (PostgreSQL / Async SQLAlchemy)
     DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite+aiosqlite:///{BASE_DIR}/orchestrator.db")
     
+    # SEC EDGAR Settings
+    SEC_EDGAR_USER_AGENT: str = os.getenv("SEC_EDGAR_USER_AGENT", "InstitutionalRiskOrchestrator compliance-team@institution.org")
+    SEC_EDGAR_RATE_LIMIT: float = float(os.getenv("SEC_EDGAR_RATE_LIMIT", "10.0"))
+
     # CORS
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5173", "*"]
 

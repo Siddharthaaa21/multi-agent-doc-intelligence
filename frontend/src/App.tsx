@@ -7,6 +7,7 @@ import { ExecutiveSummaryView } from './components/ExecutiveSummaryView';
 import { GuardrailsStudio } from './components/GuardrailsStudio';
 import { EvaluationBenchmarkView } from './components/EvaluationBenchmarkView';
 import { AgentTraceDrawer } from './components/AgentTraceDrawer';
+import { SECStreamView } from './components/SECStreamView';
 import type {
   SampleDoc,
   OrchestratorStateResponse,
@@ -23,7 +24,7 @@ import {
 } from './services/api';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'workspace' | 'guardrails' | 'benchmark' | 'trace'>('workspace');
+  const [activeTab, setActiveTab] = useState<'workspace' | 'sec' | 'guardrails' | 'benchmark' | 'trace'>('workspace');
   const [samples, setSamples] = useState<SampleDoc[]>([]);
   const [selectedSampleId, setSelectedSampleId] = useState<string>('apple_10k_fy24.txt');
   const [rawText, setRawText] = useState<string>('');
@@ -96,39 +97,47 @@ export const App: React.FC = () => {
     }
   };
 
+  const startPolling = (jobId: string) => {
+    let attempts = 0;
+    if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+
+    pollIntervalRef.current = setInterval(async () => {
+      attempts += 1;
+      try {
+        const state = await getJobStatus(jobId);
+        setCurrentState(state);
+
+        if (state.status === 'completed' || state.status === 'failed' || attempts > 30) {
+          clearInterval(pollIntervalRef.current);
+          setIsRunning(false);
+        }
+      } catch (err) {
+        console.error('Status poll error:', err);
+        clearInterval(pollIntervalRef.current);
+        setIsRunning(false);
+      }
+    }, 500);
+  };
+
   const handleRunWorkflow = async () => {
     if (!rawText.trim()) return;
 
     setIsRunning(true);
     try {
       const runRes = await runOrchestration(rawText, filename, injectTrap, llmProvider);
-      const jobId = runRes.job_id;
-
-      // Smart polling for state updates
-      let attempts = 0;
-      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-
-      pollIntervalRef.current = setInterval(async () => {
-        attempts += 1;
-        try {
-          const state = await getJobStatus(jobId);
-          setCurrentState(state);
-
-          if (state.status === 'completed' || state.status === 'failed' || attempts > 30) {
-            clearInterval(pollIntervalRef.current);
-            setIsRunning(false);
-          }
-        } catch (err) {
-          console.error('Status poll error:', err);
-          clearInterval(pollIntervalRef.current);
-          setIsRunning(false);
-        }
-      }, 500);
+      startPolling(runRes.job_id);
     } catch (err) {
       console.error('Workflow trigger error:', err);
       setIsRunning(false);
       alert(`Workflow initiation error: ${(err as Error).message}`);
     }
+  };
+
+  const handleSECIngestSuccess = (jobId: string, tickerName: string, formName: string) => {
+    setIsRunning(true);
+    setFilename(`SEC_EDGAR_${tickerName}_${formName}.txt`);
+    setActiveTab('workspace');
+    startPolling(jobId);
   };
 
   const handleStressTestTrigger = async () => {
@@ -199,6 +208,14 @@ export const App: React.FC = () => {
               </>
             )}
           </div>
+        )}
+
+        {/* SEC EDGAR Stream Tab */}
+        {activeTab === 'sec' && (
+          <SECStreamView
+            onIngestSuccess={handleSECIngestSuccess}
+            llmProvider={llmProvider}
+          />
         )}
 
         {/* Guardrails Studio Tab */}

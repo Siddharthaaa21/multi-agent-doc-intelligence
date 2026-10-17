@@ -102,6 +102,24 @@ class LLMProvider:
         elif "nvidia" in text.lower() or "nvda" in text.lower():
             company = "NVIDIA Corporation"
             ticker = "NVDA"
+        elif "microsoft" in text.lower() or "msft" in text.lower():
+            company = "Microsoft Corporation"
+            ticker = "MSFT"
+        elif "amazon" in text.lower() or "amzn" in text.lower() or "aws" in text.lower():
+            company = "Amazon.com, Inc."
+            ticker = "AMZN"
+        elif "tesla" in text.lower() or "tsla" in text.lower():
+            company = "Tesla, Inc."
+            ticker = "TSLA"
+        elif "snowflake" in text.lower() or "snow" in text.lower():
+            company = "Snowflake Inc."
+            ticker = "SNOW"
+        elif "titan" in text.lower() or "jpmorgan" in text.lower():
+            company = "Titan Logistics & Cold-Chain Infrastructure Corp"
+            ticker = "Private / Syndicated Credit"
+        elif "blackstone" in text.lower() or "breit" in text.lower():
+            company = "Blackstone Real Estate Credit Partners"
+            ticker = "BREIT Portfolio Facility"
         elif "stripe" in text.lower():
             company = "Stripe, Inc."
             ticker = "Private (Series I)"
@@ -246,6 +264,30 @@ class LLMProvider:
             sector = "Semiconductors & AI Hardware"
             sentiment = "Bullish / Strong Growth"
             sentiment_score = 0.88
+        elif "microsoft" in text_lower or "azure" in text_lower:
+            sector = "Enterprise Cloud & Software"
+            sentiment = "Bullish / Strong Growth"
+            sentiment_score = 0.82
+        elif "amazon" in text_lower or "aws" in text_lower:
+            sector = "Cloud Infrastructure & E-Commerce"
+            sentiment = "Bullish / Expansion"
+            sentiment_score = 0.78
+        elif "tesla" in text_lower or "megapack" in text_lower:
+            sector = "Electric Mobility & Clean Energy"
+            sentiment = "Moderate / Expansion"
+            sentiment_score = 0.65
+        elif "snowflake" in text_lower or "rpo" in text_lower:
+            sector = "Data Intelligence & Cloud Analytics"
+            sentiment = "Bullish / High Growth"
+            sentiment_score = 0.79
+        elif "titan" in text_lower or "refrigerated" in text_lower:
+            sector = "Transportation & Cold-Chain Logistics"
+            sentiment = "Stable / Credit Approved"
+            sentiment_score = 0.60
+        elif "blackstone" in text_lower or "real estate" in text_lower or "breit" in text_lower:
+            sector = "Commercial Real Estate & Private Credit"
+            sentiment = "Defensive / Income Focused"
+            sentiment_score = 0.58
         elif "headwinds" in text_lower or "default" in text_lower or "inflationary" in text_lower:
             sentiment = "Cautious / Headwinds"
             sentiment_score = -0.25

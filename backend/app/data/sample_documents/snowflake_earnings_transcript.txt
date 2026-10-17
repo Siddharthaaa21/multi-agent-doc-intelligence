@@ -1,0 +1,21 @@
+SNOWFLAKE INC. (NYSE: SNOW)
+Q3 FISCAL 2025 FINANCIAL RESULTS & EARNINGS CALL TRANSCRIPT
+Date: November 20, 2024
+Reporting Period: Third Quarter Ended October 31, 2024
+
+OPERATIONAL & FINANCIAL HIGHLIGHTS
+Snowflake reported record quarterly performance driven by broad-based enterprise adoption of the Snowflake Data Cloud and Cortex AI workloads.
+
+Key Financial Results:
+- Total Revenue: Reported total revenue of $942.8 million for the third quarter, representing year-over-year growth of 28.3%.
+- Product Revenue: Product revenue reached $900.3 million, up 29% year-over-year.
+- Net Revenue Retention (NRR): Dollar-based net revenue retention rate was 128%, reflecting sustained workload expansion across existing Global 2000 accounts.
+- Remaining Performance Obligations (RPO): Total RPO stood at $5.7 billion, representing 55% year-over-year growth. Current RPO expected to be recognized over the next 12 months is $2.9 billion.
+- Gross Margin: GAAP gross margin was 69.5%, while Non-GAAP gross margin expanded to 77.0%.
+- Operating Income: Non-GAAP operating income was $54.2 million, representing an operating margin of 6.0%. GAAP operating loss was $324.3 million due to equity-based compensation and R&D scaling.
+- Free Cash Flow: Generated non-GAAP adjusted free cash flow of $85.3 million, representing a free cash flow margin of 9.0%. Operating cash flow was $98.4 million.
+- Cash & Marketable Investments: Balance sheet remains exceptionally liquid with cash, cash equivalents, and short-term investments of $4.15 billion. Total Debt outstanding is $0.0 million (zero senior funded debt).
+
+RISKS & MD&A FORWARD OUTLOOK
+- Cloud infrastructure cost variations: GPU compute clusters deployed across third-party hyperscalers (AWS, Azure, Google Cloud) introduce variability in server usage pricing.
+- Customer workload migration timing: Enterprise customers optimizing data warehouse queries may extend contract consumption schedules.

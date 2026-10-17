@@ -36,6 +36,9 @@ class AnalysisJobModel(Base):
     risk_factors: Mapped[List["RiskFactorModel"]] = relationship(
         back_populates="job", cascade="all, delete-orphan"
     )
+    chunks: Mapped[List["SemanticChunkModel"]] = relationship(
+        back_populates="job", cascade="all, delete-orphan", order_by="SemanticChunkModel.chunk_index"
+    )
 
 class AgentTraceModel(Base):
     __tablename__ = "agent_traces"
@@ -81,3 +84,19 @@ class RiskFactorModel(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
 
     job: Mapped["AnalysisJobModel"] = relationship(back_populates="risk_factors")
+ 
+class SemanticChunkModel(Base):
+    __tablename__ = "semantic_chunks"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    job_id: Mapped[str] = mapped_column(ForeignKey("analysis_jobs.id"), nullable=False, index=True)
+    chunk_index: Mapped[int] = mapped_column(Integer, nullable=False)
+    section_title: Mapped[str] = mapped_column(String(128), default="General Section")
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    start_char: Mapped[int] = mapped_column(Integer, nullable=False)
+    end_char: Mapped[int] = mapped_column(Integer, nullable=False)
+    token_count: Mapped[int] = mapped_column(Integer, default=0)
+    embedding_json: Mapped[Optional[list]] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
+
+    job: Mapped["AnalysisJobModel"] = relationship(back_populates="chunks")

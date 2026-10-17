@@ -41,6 +41,12 @@ class Settings:
     SEC_EDGAR_USER_AGENT: str = os.getenv("SEC_EDGAR_USER_AGENT", "InstitutionalRiskOrchestrator compliance-team@institution.org")
     SEC_EDGAR_RATE_LIMIT: float = float(os.getenv("SEC_EDGAR_RATE_LIMIT", "10.0"))
 
+    # Celery & Redis Distributed Queue Settings
+    CELERY_BROKER_URL: str = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
+    CELERY_RESULT_BACKEND: str = os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
+    CELERY_TASK_ALWAYS_EAGER: bool = os.getenv("CELERY_TASK_ALWAYS_EAGER", "false").lower() in ("true", "1")
+    USE_DISTRIBUTED_QUEUE: bool = os.getenv("USE_DISTRIBUTED_QUEUE", "false").lower() in ("true", "1")
+
     # CORS
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5173", "*"]
 

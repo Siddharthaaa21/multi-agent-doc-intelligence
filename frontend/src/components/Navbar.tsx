@@ -105,6 +105,11 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, llmProv
             <span className="font-mono text-[11px] text-slate-400">Turnaround:</span>
             <span className="font-semibold text-emerald-400">-60% Latency</span>
           </div>
+
+          <div className="hidden lg:flex items-center space-x-1.5 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md text-slate-300">
+            <span className="font-mono text-[11px] text-slate-400">Queue:</span>
+            <span className="font-semibold text-cyan-400">Celery / Redis</span>
+          </div>
         </div>
       </div>
     </header>

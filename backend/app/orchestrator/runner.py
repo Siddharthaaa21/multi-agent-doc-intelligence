@@ -17,8 +17,14 @@ class OrchestratorRunner:
     """Manages workflow execution, async streaming, and state tracking."""
 
     @staticmethod
-    def create_job(raw_text: str, filename: str, inject_hallucination_trap: bool = False, llm_provider: str = "simulation") -> str:
-        job_id = str(uuid.uuid4())
+    def create_job(
+        raw_text: str,
+        filename: str,
+        inject_hallucination_trap: bool = False,
+        llm_provider: str = "simulation",
+        job_id: Optional[str] = None
+    ) -> str:
+        job_id = job_id or str(uuid.uuid4())
         initial_state: DocumentState = {
             "job_id": job_id,
             "raw_text": raw_text,

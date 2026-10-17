@@ -1,9 +1,9 @@
 import React from 'react';
-import { ShieldCheck, Cpu, Activity, FileSpreadsheet, Terminal } from 'lucide-react';
+import { ShieldCheck, Cpu, Activity, FileSpreadsheet, Terminal, Globe } from 'lucide-react';
 
 interface NavbarProps {
-  activeTab: 'workspace' | 'guardrails' | 'benchmark' | 'trace';
-  setActiveTab: (tab: 'workspace' | 'guardrails' | 'benchmark' | 'trace') => void;
+  activeTab: 'workspace' | 'sec' | 'guardrails' | 'benchmark' | 'trace';
+  setActiveTab: (tab: 'workspace' | 'sec' | 'guardrails' | 'benchmark' | 'trace') => void;
   llmProvider: string;
 }
 
@@ -39,6 +39,18 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, llmProv
           >
             <FileSpreadsheet className="h-3.5 w-3.5" />
             <span>Analyst Workspace</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('sec')}
+            className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-md text-xs font-medium transition-all ${
+              activeTab === 'sec'
+                ? 'bg-cyan-600 text-white shadow'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+            }`}
+          >
+            <Globe className="h-3.5 w-3.5" />
+            <span>SEC EDGAR Stream</span>
           </button>
 
           <button

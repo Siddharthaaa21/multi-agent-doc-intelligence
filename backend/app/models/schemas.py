@@ -134,5 +134,52 @@ class EvaluationSuiteResult(BaseModel):
     hallucination_catch_rate: float
     average_processing_time_sec: float
     manual_analyst_time_savings_pct: float
-    evaluated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     cases: List[BenchmarkCaseResult] = []
+
+class SECFilingMetadata(BaseModel):
+    accession_number: str
+    form: str
+    filing_date: str
+    report_date: Optional[str] = None
+    primary_document: str
+    primary_doc_description: Optional[str] = None
+    document_url: Optional[str] = None
+    size_bytes: Optional[int] = None
+
+class SECCompanySummary(BaseModel):
+    cik: str
+    ticker: str
+    company_name: str
+    sic: Optional[str] = None
+    fiscal_year_end: Optional[str] = None
+    recent_filings: List[SECFilingMetadata] = []
+
+class SECIngestRequest(BaseModel):
+    ticker: Optional[str] = None
+    cik: Optional[str] = None
+    form_type: str = "10-K"
+    accession_number: Optional[str] = None
+    primary_document: Optional[str] = None
+    llm_provider: Optional[str] = None
+    inject_hallucination_trap: bool = False
+
+class SECWatchlistItem(BaseModel):
+    ticker: str
+    cik: str
+    company_name: str
+    sector: str
+    active: bool = True
+    last_checked: Optional[str] = None
+    last_filing_date: Optional[str] = None
+    last_accession: Optional[str] = None
+
+class SECWebhookPayload(BaseModel):
+    event: str  # e.g., "filing.submitted"
+    cik: str
+    ticker: Optional[str] = None
+    form: str
+    accession_number: str
+    primary_document: str
+    filing_date: str
+    document_url: Optional[str] = None
+

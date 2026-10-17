@@ -6,6 +6,7 @@ from app.config import settings
 from app.api.documents import router as documents_router
 from app.api.orchestrator import router as orchestrator_router
 from app.api.evaluation import router as evaluation_router
+from app.api.sec import router as sec_router
 from app.db.session import init_db
 
 # Configure logging
@@ -44,6 +45,7 @@ app.add_middleware(
 app.include_router(documents_router, prefix=settings.API_PREFIX)
 app.include_router(orchestrator_router, prefix=settings.API_PREFIX)
 app.include_router(evaluation_router, prefix=settings.API_PREFIX)
+app.include_router(sec_router, prefix=settings.API_PREFIX)
 
 @app.get("/api/health")
 async def health_check():

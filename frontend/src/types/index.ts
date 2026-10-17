@@ -132,3 +132,45 @@ export interface EvaluationSuiteResult {
   evaluated_at: string;
   cases: BenchmarkCaseResult[];
 }
+
+export interface SECFilingMetadata {
+  accession_number: string;
+  form: string;
+  filing_date: string;
+  report_date?: string;
+  primary_document: string;
+  primary_doc_description?: string;
+  document_url?: string;
+  size_bytes?: number;
+}
+
+export interface SECCompanySummary {
+  cik: string;
+  ticker: string;
+  company_name: string;
+  sic?: string;
+  fiscal_year_end?: string;
+  recent_filings: SECFilingMetadata[];
+}
+
+export interface SECWatchlistItem {
+  ticker: string;
+  cik: string;
+  company_name: string;
+  sector: string;
+  active: boolean;
+  last_checked?: string;
+  last_filing_date?: string;
+  last_accession?: string;
+}
+
+export interface SECIngestRequest {
+  ticker?: string;
+  cik?: string;
+  form_type: string;
+  accession_number?: string;
+  primary_document?: string;
+  llm_provider?: string;
+  inject_hallucination_trap?: boolean;
+}
+

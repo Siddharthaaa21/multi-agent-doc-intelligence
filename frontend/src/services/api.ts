@@ -68,3 +68,43 @@ export async function runEvaluationSuite(): Promise<EvaluationSuiteResult> {
   if (!res.ok) throw new Error('Failed to execute evaluation suite');
   return res.json();
 }
+
+export async function fetchSECTickers(): Promise<Array<{ ticker: string; cik: string }>> {
+  const res = await fetch(`${API_BASE}/sec/tickers`);
+  if (!res.ok) throw new Error('Failed to fetch SEC tickers');
+  return res.json();
+}
+
+export async function fetchSECFilings(identifier: string): Promise<any> {
+  const res = await fetch(`${API_BASE}/sec/filings/${encodeURIComponent(identifier)}`);
+  if (!res.ok) throw new Error(`Failed to fetch filings for ${identifier}`);
+  return res.json();
+}
+
+export async function ingestSECFiling(payload: {
+  ticker?: string;
+  cik?: string;
+  form_type?: string;
+  accession_number?: string;
+  primary_document?: string;
+  llm_provider?: string;
+  inject_hallucination_trap?: boolean;
+}): Promise<any> {
+  const res = await fetch(`${API_BASE}/sec/ingest`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'SEC Ingestion failed' }));
+    throw new Error(err.detail || 'SEC Ingestion failed');
+  }
+  return res.json();
+}
+
+export async function fetchSECWatchlist(): Promise<{ watchlist: any[]; recent_ingestions: any[] }> {
+  const res = await fetch(`${API_BASE}/sec/watchlist`);
+  if (!res.ok) throw new Error('Failed to fetch SEC watchlist');
+  return res.json();
+}
+

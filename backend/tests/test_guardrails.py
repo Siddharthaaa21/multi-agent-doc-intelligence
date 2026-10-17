@@ -58,3 +58,54 @@ async def test_guardrail_catches_hallucinated_figures(sample_apple_10k_text):
     flagged_item = next(item for item in guardrail_result["items"] if item["metric_name"] == "Fabricated TAM Claim")
     assert flagged_item["status"] == "FLAGGED_DISCREPANCY"
     assert "GUARDRAIL ALERT" in flagged_item["notes"]
+
+
+@pytest.mark.asyncio
+async def test_operating_margin_arithmetic_invariant_violation():
+    """Verify that contradictory operating margin vs operating income / revenue is flagged."""
+    text = "Reported Total Revenue of $100.0 billion, Operating Income of $20.0 billion, and Operating Margin of 45.0%."
+    metrics = [
+        {"name": "Total Revenue", "value": 100.0, "unit": "USD Billion", "source_span": "Total Revenue of $100.0 billion"},
+        {"name": "Operating Income", "value": 20.0, "unit": "USD Billion", "source_span": "Operating Income of $20.0 billion"},
+        # 20 / 100 = 20.0%, but extracted claim states 45.0%
+        {"name": "Operating Margin", "value": 45.0, "unit": "%", "source_span": "Operating Margin of 45.0%"}
+    ]
+    result = await guardrail_agent.run(text, metrics)
+    gr = result["guardrail_result"]
+    om_item = next(i for i in gr["items"] if i["metric_name"] == "Operating Margin")
+    assert om_item["status"] == "FLAGGED_DISCREPANCY"
+    assert "ARITHMETIC INVARIANT VIOLATION" in om_item["notes"]
+    assert "Operating Margin (45.0%) diverges" in om_item["notes"]
+
+
+@pytest.mark.asyncio
+async def test_revenue_dominance_invariant_violation():
+    """Verify that Operating Income exceeding Total Revenue is flagged."""
+    text = "Total Revenue reached $50.0 billion while Operating Income was $65.0 billion."
+    metrics = [
+        {"name": "Total Revenue", "value": 50.0, "unit": "USD Billion", "source_span": "Total Revenue reached $50.0 billion"},
+        {"name": "Operating Income", "value": 65.0, "unit": "USD Billion", "source_span": "Operating Income was $65.0 billion"}
+    ]
+    result = await guardrail_agent.run(text, metrics)
+    gr = result["guardrail_result"]
+    oi_item = next(i for i in gr["items"] if i["metric_name"] == "Operating Income")
+    assert oi_item["status"] == "FLAGGED_DISCREPANCY"
+    assert "cannot exceed Total Revenue" in oi_item["notes"]
+
+
+@pytest.mark.asyncio
+async def test_net_debt_invariant_detection():
+    """Verify Net Debt ≈ Total Debt - Cash invariant check."""
+    text = "Total Debt stood at $100.0 billion and Cash totaled $20.0 billion, with Net Debt reported as $120.0 billion."
+    metrics = [
+        {"name": "Total Debt", "value": 100.0, "unit": "USD Billion", "source_span": "Total Debt stood at $100.0 billion"},
+        {"name": "Cash", "value": 20.0, "unit": "USD Billion", "source_span": "Cash totaled $20.0 billion"},
+        # 100 - 20 = 80, but claim says 120
+        {"name": "Net Debt", "value": 120.0, "unit": "USD Billion", "source_span": "Net Debt reported as $120.0 billion"}
+    ]
+    result = await guardrail_agent.run(text, metrics)
+    gr = result["guardrail_result"]
+    nd_item = next(i for i in gr["items"] if i["metric_name"] == "Net Debt")
+    assert nd_item["status"] == "FLAGGED_DISCREPANCY"
+    assert "ARITHMETIC INVARIANT VIOLATION" in nd_item["notes"]
+

@@ -14,7 +14,7 @@ class GuardrailAgent:
     def verify_metric_grounding(self, metric: Dict[str, Any], raw_text: str) -> Dict[str, Any]:
         """Perform programmatic fact-checking against source text."""
         raw_val = metric.get("raw_text_value", "")
-        numeric_val = metric.get("value", 0.0)
+        numeric_val = float(metric.get("numeric_value") if metric.get("numeric_value") is not None else metric.get("value", 0.0))
         source_span = metric.get("source_span", "").strip()
         metric_name = metric.get("name", "")
 
@@ -65,6 +65,120 @@ class GuardrailAgent:
             "notes": notes
         }
 
+    def verify_arithmetic_invariants(self, metrics: List[Dict[str, Any]], items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Verify institutional cross-metric invariants: Operating Margin, Gross Margin, Dominance, Net Debt, FCF."""
+        metrics_by_canonical = {}
+        for m in metrics:
+            name_clean = m.get("name", "").strip().lower()
+            val = m.get("numeric_value") if m.get("numeric_value") is not None else m.get("value")
+            if val is None:
+                continue
+            try:
+                numeric_val = float(val)
+            except (ValueError, TypeError):
+                continue
+
+            if any(k in name_clean for k in ["total revenue", "total net sales", "net revenue", "revenue"]):
+                metrics_by_canonical["revenue"] = (m, numeric_val)
+            elif any(k in name_clean for k in ["operating income", "operating profit"]):
+                metrics_by_canonical["operating_income"] = (m, numeric_val)
+            elif "operating margin" in name_clean:
+                metrics_by_canonical["operating_margin"] = (m, numeric_val)
+            elif "gross margin" in name_clean or "gross profit margin" in name_clean:
+                metrics_by_canonical["gross_margin"] = (m, numeric_val)
+            elif "gross profit" in name_clean:
+                metrics_by_canonical["gross_profit"] = (m, numeric_val)
+            elif any(k in name_clean for k in ["net income", "net earnings"]):
+                metrics_by_canonical["net_income"] = (m, numeric_val)
+            elif "free cash flow" in name_clean or name_clean == "fcf":
+                metrics_by_canonical["free_cash_flow"] = (m, numeric_val)
+            elif any(k in name_clean for k in ["operating cash flow", "cash from operations"]):
+                metrics_by_canonical["operating_cash_flow"] = (m, numeric_val)
+            elif any(k in name_clean for k in ["capital expenditure", "capex"]):
+                metrics_by_canonical["capex"] = (m, numeric_val)
+            elif "net debt" in name_clean:
+                metrics_by_canonical["net_debt"] = (m, numeric_val)
+            elif any(k in name_clean for k in ["total debt", "term debt", "funded debt"]):
+                metrics_by_canonical["total_debt"] = (m, numeric_val)
+            elif "cash and cash equivalents" in name_clean or name_clean == "cash":
+                metrics_by_canonical["cash"] = (m, numeric_val)
+
+        item_lookup = {item["metric_name"]: item for item in items}
+
+        # 1. Operating Margin Invariant: Operating Margin % ≈ (Operating Income / Revenue) * 100
+        if "revenue" in metrics_by_canonical and "operating_income" in metrics_by_canonical and "operating_margin" in metrics_by_canonical:
+            rev_m, rev_val = metrics_by_canonical["revenue"]
+            oi_m, oi_val = metrics_by_canonical["operating_income"]
+            om_m, om_val = metrics_by_canonical["operating_margin"]
+            if rev_val > 0:
+                expected_om = (oi_val / rev_val) * 100.0
+                if abs(om_val - expected_om) > 5.0:
+                    om_item = item_lookup.get(om_m.get("name"))
+                    if om_item:
+                        om_item["status"] = "FLAGGED_DISCREPANCY"
+                        om_item["calculated_consistency"] = False
+                        om_item["confidence_score"] = 0.20
+                        om_item["notes"] = f"ARITHMETIC INVARIANT VIOLATION: Operating Margin ({om_val:.1f}%) diverges from Operating Income (${oi_val}) / Revenue (${rev_val}) = {expected_om:.1f}%."
+
+        # 2. Gross Margin Invariant: Gross Margin % ≈ (Gross Profit / Revenue) * 100
+        if "revenue" in metrics_by_canonical and "gross_profit" in metrics_by_canonical and "gross_margin" in metrics_by_canonical:
+            rev_m, rev_val = metrics_by_canonical["revenue"]
+            gp_m, gp_val = metrics_by_canonical["gross_profit"]
+            gm_m, gm_val = metrics_by_canonical["gross_margin"]
+            if rev_val > 0:
+                expected_gm = (gp_val / rev_val) * 100.0
+                if abs(gm_val - expected_gm) > 5.0:
+                    gm_item = item_lookup.get(gm_m.get("name"))
+                    if gm_item:
+                        gm_item["status"] = "FLAGGED_DISCREPANCY"
+                        gm_item["calculated_consistency"] = False
+                        gm_item["confidence_score"] = 0.20
+                        gm_item["notes"] = f"ARITHMETIC INVARIANT VIOLATION: Gross Margin ({gm_val:.1f}%) diverges from Gross Profit (${gp_val}) / Revenue (${rev_val}) = {expected_gm:.1f}%."
+
+        # 3. Revenue Dominance Invariant: Operating Income cannot exceed Revenue
+        if "revenue" in metrics_by_canonical and "operating_income" in metrics_by_canonical:
+            rev_m, rev_val = metrics_by_canonical["revenue"]
+            oi_m, oi_val = metrics_by_canonical["operating_income"]
+            if rev_val > 0 and oi_val > (rev_val * 1.05):
+                oi_item = item_lookup.get(oi_m.get("name"))
+                if oi_item:
+                    oi_item["status"] = "FLAGGED_DISCREPANCY"
+                    oi_item["calculated_consistency"] = False
+                    oi_item["confidence_score"] = 0.15
+                    oi_item["notes"] = f"ARITHMETIC INVARIANT VIOLATION: Operating Income (${oi_val}) cannot exceed Total Revenue (${rev_val})."
+
+        # 4. Net Debt Invariant: Net Debt ≈ Total Debt - Cash
+        if "net_debt" in metrics_by_canonical and "total_debt" in metrics_by_canonical and "cash" in metrics_by_canonical:
+            nd_m, nd_val = metrics_by_canonical["net_debt"]
+            td_m, td_val = metrics_by_canonical["total_debt"]
+            c_m, c_val = metrics_by_canonical["cash"]
+            expected_nd = td_val - c_val
+            tolerance = max(2.0, 0.08 * abs(expected_nd))
+            if abs(nd_val - expected_nd) > tolerance:
+                nd_item = item_lookup.get(nd_m.get("name"))
+                if nd_item:
+                    nd_item["status"] = "FLAGGED_DISCREPANCY"
+                    nd_item["calculated_consistency"] = False
+                    nd_item["confidence_score"] = 0.25
+                    nd_item["notes"] = f"ARITHMETIC INVARIANT VIOLATION: Net Debt (${nd_val}) diverges from Total Debt (${td_val}) - Cash (${c_val}) = ${expected_nd}."
+
+        # 5. Free Cash Flow Invariant: FCF ≈ Operating Cash Flow - CapEx
+        if "free_cash_flow" in metrics_by_canonical and "operating_cash_flow" in metrics_by_canonical and "capex" in metrics_by_canonical:
+            fcf_m, fcf_val = metrics_by_canonical["free_cash_flow"]
+            ocf_m, ocf_val = metrics_by_canonical["operating_cash_flow"]
+            cx_m, cx_val = metrics_by_canonical["capex"]
+            expected_fcf = ocf_val - abs(cx_val)
+            tolerance = max(2.0, 0.08 * abs(expected_fcf))
+            if abs(fcf_val - expected_fcf) > tolerance:
+                fcf_item = item_lookup.get(fcf_m.get("name"))
+                if fcf_item:
+                    fcf_item["status"] = "FLAGGED_DISCREPANCY"
+                    fcf_item["calculated_consistency"] = False
+                    fcf_item["confidence_score"] = 0.25
+                    fcf_item["notes"] = f"ARITHMETIC INVARIANT VIOLATION: Free Cash Flow (${fcf_val}) diverges from Operating Cash Flow (${ocf_val}) - CapEx (${abs(cx_val)}) = ${expected_fcf}."
+
+        return items
+
     async def run(self, raw_text: str, metrics: List[Dict[str, Any]], iteration: int = 1, inject_trap: bool = False) -> Dict[str, Any]:
         start_time = time.time()
         
@@ -72,6 +186,9 @@ class GuardrailAgent:
         for m in metrics:
             item = self.verify_metric_grounding(m, raw_text)
             items.append(item)
+
+        # Run multi-factor institutional arithmetic invariant validation
+        items = self.verify_arithmetic_invariants(metrics, items)
 
         verified_count = sum(1 for item in items if item["status"] == "VERIFIED")
         total_count = len(items) if items else 1

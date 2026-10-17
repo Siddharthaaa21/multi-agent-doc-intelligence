@@ -33,14 +33,39 @@ async def run_orchestration(req: OrchestratorRunRequest, background_tasks: Backg
         llm_provider=provider
     )
 
-    # Execute in background task so UI can stream or poll
-    background_tasks.add_task(runner.run_job, job_id)
+    # Dispatch to distributed Celery worker or fallback to in-process async task
+    dispatched_via_celery = False
+    if settings.USE_DISTRIBUTED_QUEUE:
+        try:
+            from app.worker.tasks import orchestrate_document_task
+            orchestrate_document_task.delay(
+                job_id=job_id,
+                raw_text=raw_text,
+                filename=filename,
+                inject_hallucination_trap=req.inject_hallucination_trap,
+                llm_provider=provider
+            )
+            dispatched_via_celery = True
+        except Exception as queue_err:
+            import logging
+            logging.getLogger(__name__).warning(f"Celery dispatch failed ({queue_err}), falling back to in-process execution.")
+
+    if not dispatched_via_celery:
+        background_tasks.add_task(runner.run_job, job_id)
 
     return {
         "job_id": job_id,
         "status": "queued",
+        "dispatch_mode": "distributed_celery" if dispatched_via_celery else "in_process_async",
         "message": "Multi-agent LangGraph workflow initiated."
     }
+
+@router.get("/queue/status")
+async def get_queue_status():
+    """Healthcheck endpoint verifying Celery worker liveness and Redis queue depth."""
+    from app.worker.inspector import queue_inspector
+    return queue_inspector.get_full_queue_status()
+
 
 @router.get("/status/{job_id}", response_model=OrchestratorStateResponse)
 async def get_job_status(job_id: str):

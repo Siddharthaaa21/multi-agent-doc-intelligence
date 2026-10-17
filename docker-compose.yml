@@ -1,6 +1,40 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: strata_orchestrator_postgres
+    environment:
+      - POSTGRES_USER=strata_user
+      - POSTGRES_PASSWORD=strata_password
+      - POSTGRES_DB=strata_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U strata_user -d strata_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - strata_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: strata_orchestrator_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - strata_network
+
   backend:
     build:
       context: ./backend
@@ -14,12 +48,45 @@ services:
       - LLM_PROVIDER=${LLM_PROVIDER:-simulation}
       - GUARDRAIL_CONFIDENCE_THRESHOLD=0.95
       - MAX_REFINEMENT_LOOPS=2
+      - DATABASE_URL=postgresql+asyncpg://strata_user:strata_password@postgres:5432/strata_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - USE_DISTRIBUTED_QUEUE=true
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 15s
       timeout: 5s
       retries: 3
+    networks:
+      - strata_network
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: strata_orchestrator_worker
+    command: celery -A app.worker.celery_app worker --loglevel=info --concurrency=4
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - LLM_PROVIDER=${LLM_PROVIDER:-simulation}
+      - GUARDRAIL_CONFIDENCE_THRESHOLD=0.95
+      - MAX_REFINEMENT_LOOPS=2
+      - DATABASE_URL=postgresql+asyncpg://strata_user:strata_password@postgres:5432/strata_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
     networks:
       - strata_network
 
@@ -36,6 +103,10 @@ services:
     restart: unless-stopped
     networks:
       - strata_network
+
+volumes:
+  postgres_data:
+    driver: local
 
 networks:
   strata_network:

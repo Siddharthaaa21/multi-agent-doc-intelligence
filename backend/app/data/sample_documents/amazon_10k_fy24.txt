@@ -1,0 +1,29 @@
+UNITED STATES SECURITIES AND EXCHANGE COMMISSION
+WASHINGTON, D.C. 20549
+FORM 10-K
+ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934
+For the fiscal year ended December 31, 2024
+
+AMAZON.COM, INC.
+410 Terry Avenue North, Seattle, Washington 98109
+
+PART II - ITEM 7. MANAGEMENT'S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+Executive Overview
+Net sales increased 11% to $620.13 billion in fiscal 2024, compared with $574.79 billion in fiscal 2023. Excluding the $2.3 billion unfavorable impact from year-over-year foreign exchange rates, net sales increased 12%.
+
+Segment Financial Performance
+- AWS Segment net sales increased 19% year-over-year to $105.25 billion, compared with $88.52 billion in fiscal 2023. AWS segment operating income was $39.82 billion, representing an AWS operating margin of 37.8%, driven by structural optimization of server life cycles and accelerated customer commitments for enterprise cloud migrations.
+- North America segment net sales increased 9% to $378.50 billion, with operating income of $21.40 billion.
+- International segment net sales increased 8% to $136.38 billion, with operating income turning positive to $7.20 billion.
+
+Consolidated Earnings & Cash Flows
+Consolidated operating income improved substantially to $68.42 billion, compared with $36.85 billion in fiscal 2023. Consolidated operating margin reached 11.0%.
+Consolidated net income was $49.21 billion, or $4.68 per diluted share.
+Adjusted EBITDA totaled $104.50 billion.
+Operating cash flow generated $112.70 billion. Capital expenditures totaled $65.00 billion, resulting in free cash flow of $47.70 billion for the trailing twelve months.
+Cash, cash equivalents, and marketable securities were $86.78 billion. Total long-term debt was $58.30 billion.
+
+ITEM 1A. INSTITUTIONAL RISK FACTORS
+- Infrastructure capital commitments: Substantial investments in custom silicon and AI infrastructure may lengthen payback horizons if enterprise workload adoption slows.
+- Regulatory antitrust and competition laws: Global scrutiny under the EU Digital Markets Act and Federal Trade Commission proceedings in the United States.
+- International trade restrictions and shipping volatility: Exposure to ocean freight rate fluctuations and potential customs tariffs impacting retail import unit economics.

@@ -1,0 +1,30 @@
+UNITED STATES SECURITIES AND EXCHANGE COMMISSION
+WASHINGTON, D.C. 20549
+FORM 10-Q
+QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934
+For the quarterly period ended September 30, 2024
+
+TESLA, INC.
+1 Tesla Road, Austin, Texas 78725
+
+PART I. FINANCIAL INFORMATION
+ITEM 1. FINANCIAL STATEMENTS
+
+CONSOLIDATED STATEMENTS OF OPERATIONS (UNAUDITED)
+Total revenues increased 8% year-over-year to $25.18 billion in the third quarter of 2024, compared to $23.35 billion in the third quarter of 2023.
+Automotive segment revenues were $20.02 billion, which included $739 million of regulatory credits revenue compared to $554 million in the prior year period.
+Automotive gross margin excluding regulatory credits was 17.1%. Consolidated gross profit was $4.99 billion, representing a consolidated gross margin of 19.8%.
+
+Energy storage and generation segment revenues reached $2.38 billion, surging 52% year-over-year. Megapack and Powerwall battery storage deployments reached a quarterly record of 6.9 GWh.
+Operating income was $2.72 billion for the quarter, an increase of 54% year-over-year, and operating margin expanded to 10.8%.
+Adjusted EBITDA reached $4.66 billion.
+Net income for the quarter was $2.17 billion, or $0.62 per diluted share.
+
+LIQUIDITY & CAPITAL RESOURCES
+Operating cash flow was $6.25 billion. Capital expenditures were $3.51 billion, resulting in free cash flow of $2.74 billion for the third quarter.
+Cash and cash equivalents and marketable securities stood at $33.65 billion at the end of the period. Total debt and finance leases stood at $5.45 billion.
+
+RISK FACTORS & SENSITIVITY DISCLOSURES
+- Pricing and margin pressure: Aggressive vehicle financing rate subsidies and product refresh cycles may exert pressure on automotive average selling prices.
+- Supply chain logistics for critical minerals: Lithium hydroxide, nickel, and synthetic graphite cathode raw materials face international export licensing restrictions.
+- Regulatory credit dependency: Future earnings may fluctuate as legacy automakers fulfill their zero-emission compliance standards without purchasing third-party regulatory credits.

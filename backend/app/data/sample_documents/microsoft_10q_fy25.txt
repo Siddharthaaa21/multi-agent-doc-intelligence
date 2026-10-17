@@ -1,0 +1,30 @@
+UNITED STATES SECURITIES AND EXCHANGE COMMISSION
+WASHINGTON, D.C. 20549
+FORM 10-Q
+QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934
+For the quarterly period ended September 30, 2024
+
+MICROSOFT CORPORATION
+One Microsoft Way, Redmond, Washington 98052
+
+PART I. FINANCIAL INFORMATION
+ITEM 1. FINANCIAL STATEMENTS
+
+CONSOLIDATED INCOME STATEMENTS (UNAUDITED)
+Microsoft reported total revenue of $65.59 billion for the first quarter of fiscal 2025, an increase of 16% compared to the prior year period.
+Microsoft Cloud revenue was $38.9 billion, up 22% year-over-year, driven by continued customer adoption of hybrid infrastructure and enterprise AI solutions.
+
+Intelligent Cloud segment revenue reached $24.09 billion, with Azure and other cloud services revenue growing 33%.
+Gross margin for the quarter was $45.45 billion, representing a gross margin percentage of 69.3%.
+Operating income was $30.55 billion, an increase of 14% year-over-year, and operating margin was 46.6%.
+Adjusted EBITDA reached $34.12 billion.
+Net income was $24.67 billion, up 11% compared to $22.29 billion in the first quarter of fiscal 2024. Diluted earnings per share was $3.30.
+
+CASH FLOWS & BALANCE SHEET STRENGTH
+Cash flow from operations was $34.18 billion. Capital expenditures including finance leases were $19.00 billion, driven by robust demand for cloud computing capacity and high-density semiconductor accelerators. Free cash flow was $15.18 billion.
+Cash, cash equivalents, and short-term investments totaled $78.43 billion at quarter end. Total commercial paper and senior debt stood at $42.50 billion.
+
+ITEM 1A. RISK FACTORS & DISCLOSURES
+- Capital expenditure scaling: Substantial investments in data center infrastructure, graphics processing units, and high-bandwidth networking may adversely affect gross margins if fulfillment velocity lags capacity procurement.
+- Regulatory inquiries and compliance: Expanding antitrust inquiries in the United States and European Union regarding software bundling and cloud software ecosystem licensing agreements.
+- Geopolitical and macroeconomic volatility: Fluctuations in foreign exchange rates resulted in an estimated 100 basis points negative impact on reported cloud revenue growth.

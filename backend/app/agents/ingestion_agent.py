@@ -94,12 +94,11 @@ class IngestionAgent:
         ext = filename.lower().split(".")[-1] if "." in filename else ""
         if ext == "pdf":
             try:
-                from pypdf import PdfReader
-                reader = PdfReader(io.BytesIO(content))
-                text_pages = [page.extract_text() or "" for page in reader.pages]
-                return "\n\n--- PAGE BREAK ---\n\n".join(text_pages)
+                from app.parser.pdf_parser import pdf_parser
+                parsed = pdf_parser.parse_pdf_document(content, filename)
+                return parsed["clean_text"]
             except Exception as e:
-                logger.error(f"Error parsing PDF with pypdf: {e}")
+                logger.error(f"Error parsing PDF with pdf_parser: {e}")
                 return content.decode("utf-8", errors="ignore")
         else:
             return content.decode("utf-8", errors="ignore")

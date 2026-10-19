@@ -174,3 +174,26 @@ export interface SECIngestRequest {
   inject_hallucination_trap?: boolean;
 }
 
+export interface DisputeResolution {
+  job_id: string;
+  metric_name: string;
+  status: 'APPROVED' | 'OVERRIDDEN' | 'ESCALATED_TO_COMMITTEE';
+  analyst_id: string;
+  timestamp: string;
+  original_value?: string;
+  corrected_value?: string;
+  source_span?: string;
+  notes: string;
+  audit_hash: string;
+  verified: boolean;
+}
+
+export interface MetricsSummary {
+  pass_rate_sla: number;
+  pass_rate_target: number;
+  mean_groundedness: number;
+  turnaround_reduction_pct: number;
+  hallucination_catch_rate: number;
+  active_sla_status: string;
+}
+

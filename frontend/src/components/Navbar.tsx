@@ -2,8 +2,8 @@ import React from 'react';
 import { ShieldCheck, Cpu, Activity, FileSpreadsheet, Terminal, Globe } from 'lucide-react';
 
 interface NavbarProps {
-  activeTab: 'workspace' | 'sec' | 'guardrails' | 'benchmark' | 'trace';
-  setActiveTab: (tab: 'workspace' | 'sec' | 'guardrails' | 'benchmark' | 'trace') => void;
+  activeTab: 'workspace' | 'sec' | 'guardrails' | 'benchmark' | 'trace' | 'observability';
+  setActiveTab: (tab: 'workspace' | 'sec' | 'guardrails' | 'benchmark' | 'trace' | 'observability') => void;
   llmProvider: string;
 }
 
@@ -78,6 +78,18 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, llmProv
           >
             <Activity className="h-3.5 w-3.5" />
             <span>Regression Pipeline</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('observability')}
+            className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-md text-xs font-medium transition-all ${
+              activeTab === 'observability'
+                ? 'bg-amber-600 text-white shadow'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+            }`}
+          >
+            <ShieldCheck className="h-3.5 w-3.5" />
+            <span>Disputes & Metrics</span>
           </button>
 
           <button

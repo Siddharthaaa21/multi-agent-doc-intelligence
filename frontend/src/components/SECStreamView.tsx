@@ -17,25 +17,6 @@ export const SECStreamView: React.FC<SECStreamViewProps> = ({ onIngestSuccess, l
   const [ingestingAccession, setIngestingAccession] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Load supported tickers and watchlist on mount
-  useEffect(() => {
-    async function loadInitial() {
-      try {
-        const [tickersRes, watchRes] = await Promise.all([
-          fetchSECTickers(),
-          fetchSECWatchlist()
-        ]);
-        setSupportedTickers(tickersRes);
-        setWatchlist(watchRes.watchlist || []);
-        setRecentIngestions(watchRes.recent_ingestions || []);
-      } catch (err) {
-        console.error('Failed to load initial SEC data:', err);
-      }
-    }
-    loadInitial();
-    handleSearch('AAPL');
-  }, []);
-
   const handleSearch = async (targetTicker: string) => {
     if (!targetTicker.trim()) return;
     setIsLoading(true);
@@ -50,6 +31,26 @@ export const SECStreamView: React.FC<SECStreamViewProps> = ({ onIngestSuccess, l
       setIsLoading(false);
     }
   };
+
+  // Load supported tickers, watchlist, and default AAPL filings on mount
+  useEffect(() => {
+    async function loadInitial() {
+      try {
+        const [tickersRes, watchRes, summary] = await Promise.all([
+          fetchSECTickers(),
+          fetchSECWatchlist(),
+          fetchSECFilings('AAPL')
+        ]);
+        setSupportedTickers(tickersRes);
+        setWatchlist(watchRes.watchlist || []);
+        setRecentIngestions(watchRes.recent_ingestions || []);
+        setCompanySummary(summary);
+      } catch (err) {
+        console.error('Failed to load initial SEC data:', err);
+      }
+    }
+    loadInitial();
+  }, []);
 
   const handleIngest = async (filing: SECFilingMetadata) => {
     setIngestingAccession(filing.accession_number);

@@ -198,11 +198,45 @@ Expected terminal output:
 | `GET` | `/api/documents/samples` | Catalog of preloaded institutional financial documents |
 | `GET` | `/api/documents/sample/{filename}` | Retrieve raw text buffer of a sample document |
 | `POST` | `/api/documents/upload` | Multipart file upload (PDF/TXT) with text extraction |
-| `POST` | `/api/orchestrator/run` | Trigger LangGraph multi-agent execution run |
+| `POST` | `/api/orchestrator/run` | Trigger LangGraph multi-agent execution run (or Celery task) |
 | `GET` | `/api/orchestrator/status/{job_id}` | Poll state, metrics, executive summary, and agent trace |
 | `GET` | `/api/orchestrator/stream/{job_id}` | Server-Sent Events (SSE) live event stream |
+| `GET` | `/api/orchestrator/queue/status` | Real-time Celery worker status and Redis queue metrics |
 | `POST` | `/api/eval/run` | Execute automated regression evaluation suite |
 | `GET` | `/api/eval/benchmark` | Retrieve latest regression benchmark report |
+| `GET` | `/api/sec/tickers` | SEC EDGAR supported tickers and CIK registry |
+| `GET` | `/api/sec/filings/{ticker}` | Real-time submissions feed from SEC EDGAR API |
+| `POST` | `/api/sec/ingest` | Automated ingestion and parsing of 10-K/10-Q filings |
+| `GET` | `/api/sec/watchlist` | Institutional SEC filing watchlist and background ingestions |
+| `POST` | `/api/retrieval/index` | Build hybrid dense-sparse vector index with BM25 & embeddings |
+| `POST` | `/api/retrieval/search` | Execute sub-50ms hybrid dense-sparse retrieval with RRF ranking |
+| `GET` | `/api/metrics` | Prometheus 0.0.4 text exposition format for Grafana scraping |
+| `GET` | `/api/metrics/summary` | Real-time SLA compliance and throughput JSON summary |
+| `GET` | `/api/disputes` | Institutional audit trail of discrepancy reviews and overrides |
+| `POST` | `/api/disputes/resolve` | Sign off on discrepancy with immutable SHA-256 digital signature |
+
+---
+
+## 📚 Machine Learning & Systems Theory Reference Kit
+
+Comprehensive technical deep-dives and mathematical formulations are provided in the [`reference-learning-kit/`](reference-learning-kit/):
+
+1. **[01 - ML Evaluation Theory, Metrics & Testing Methodology](reference-learning-kit/01-ml-evaluation-theory-and-metrics/README.md)**:
+   - Precision, Recall, $F_1$, and Groundedness Ratio ($\mathcal{G}$).
+   - Why surface overlap metrics (BLEU, ROUGE) fail on tabular financial filings.
+   - Deterministic assertion harnesses vs. stochastic LLM-as-a-Judge.
+2. **[02 - Multi-Agent Systems Theory & State Machine Orchestration](reference-learning-kit/02-multi-agent-systems-theory/README.md)**:
+   - DAGs vs. cyclic state machines, LangGraph state reducers, and message queues.
+   - Celery + Redis distributed execution for institutional throughput.
+3. **[03 - Hallucination Mathematics & Adversarial Guardrail Theory](reference-learning-kit/03-hallucination-and-adversarial-guardrail-theory/README.md)**:
+   - Hallucination drift ($D_H$), arithmetic invariant bounds, and adversarial perturbation traps.
+   - Character-level text span coordinate verification.
+4. **[04 - Document Intelligence & Structural Chunking](reference-learning-kit/04-document-intelligence-and-nlp-theory/README.md)**:
+   - High-fidelity PDF comparative table parsing, zero hallucinated rows from running headers/footers.
+   - Hybrid dense-sparse retrieval with Reciprocal Rank Fusion (RRF, $k=60$).
+5. **[05 - Project Architecture & SLA Engineering Deep Dive](reference-learning-kit/05-project-architecture-and-sla-deep-dive/README.md)**:
+   - Engineering 99.2% evaluation pass rate and $\ge 60\%$ analyst turnaround reduction.
+   - Prometheus observability exporter and collaborative discrepancy dispute resolution.
 
 ---
 
@@ -212,28 +246,20 @@ Expected terminal output:
 multi-agent-doc-intelligence/
 ├── backend/
 │   ├── app/
-│   │   ├── main.py                    # FastAPI entrypoint, CORS & routes
-│   │   ├── config.py                  # Settings, thresholds & environment configs
-│   │   ├── models/
-│   │   │   ├── schemas.py             # Pydantic models (Metrics, Summary, Evals)
-│   │   │   └── state.py               # LangGraph TypedDict DocumentState
-│   │   ├── agents/
-│   │   │   ├── ingestion_agent.py      # PDF parsing, semantic chunking & extraction
-│   │   │   ├── classification_agent.py # Filing taxonomy & risk categorization
-│   │   │   ├── guardrail_agent.py      # Anti-hallucination verification critic
-│   │   │   └── synthesis_agent.py      # Executive briefing & committee rating
-│   │   ├── orchestrator/
-│   │   │   ├── graph.py               # LangGraph StateGraph & cyclic edges
-│   │   │   └── runner.py              # Async execution & SSE streaming engine
-│   │   ├── llm/
-│   │   │   ├── provider.py            # OpenAI, Anthropic & Simulation fallback
-│   │   │   └── prompts.py             # Institutional system prompts
-│   │   ├── evaluation/
-│   │   │   ├── benchmark_data.py      # 25 benchmark scenarios & adversarial traps
-│   │   │   └── evaluator.py           # Automated regression pipeline (99.2% pass rate)
-│   │   ├── api/                       # Modular FastAPI APIRouters
-│   │   └── data/sample_documents/     # Apple 10-K, Nvidia 10-Q, Stripe, Barclays
-│   ├── tests/                         # Comprehensive pytest test suite (13 test cases)
+│   │   ├── main.py                    # FastAPI entrypoint, lifespan & routes
+│   │   ├── config.py                  # Institutional thresholds & configs
+│   │   ├── models/                    # Pydantic schemas & DocumentState
+│   │   ├── agents/                    # Ingestion, Classifier, Guardrail, Synthesis
+│   │   ├── orchestrator/              # LangGraph state machine & streaming
+│   │   ├── retrieval/                 # Hybrid dense-sparse vector engine & RRF
+│   │   ├── sec/                       # SEC EDGAR client, rate limiter & parser
+│   │   ├── metrics/                   # Prometheus metrics exporter
+│   │   ├── disputes/                  # SHA-256 signed discrepancy dispute hub
+│   │   ├── worker/                    # Celery distributed worker tasks
+│   │   ├── db/                        # SQLAlchemy async models & session
+│   │   ├── evaluation/                # 25-case regression benchmark & traps
+│   │   └── api/                       # Modular FastAPI APIRouters
+│   ├── tests/                         # 67 comprehensive unit & integration tests
 │   ├── requirements.txt               # Backend dependencies
 │   └── Dockerfile                     # Python 3.11 container definition
 ├── frontend/
@@ -246,14 +272,17 @@ multi-agent-doc-intelligence/
 │   │   │   ├── ExecutiveSummaryView.tsx
 │   │   │   ├── GuardrailsStudio.tsx
 │   │   │   ├── EvaluationBenchmarkView.tsx
+│   │   │   ├── SECStreamView.tsx
+│   │   │   ├── ObservabilityDisputesView.tsx
 │   │   │   └── AgentTraceDrawer.tsx
 │   │   ├── services/api.ts            # Frontend API client
 │   │   ├── types/index.ts             # TypeScript interface definitions
-│   │   └── App.tsx                    # Main workstation application
+│   │   └── App.tsx                    # Main analyst workstation
 │   ├── nginx.conf                     # Production reverse-proxy configuration
-│   └── Dockerfile                     # Multi-stage frontend container
+│   └── Dockerfile                     # Multi-stage frontend container (Node 22)
+├── reference-learning-kit/            # Theory, ML formulations & architecture docs
 ├── docker-compose.yml                 # Full-stack container orchestration
-├── eval_runner.py                     # Standalone CLI regression pipeline runner
+├── eval_runner.py                     # Standalone CLI regression pipeline runner (99.2%)
 └── README.md
 ```
 

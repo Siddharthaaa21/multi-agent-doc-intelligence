@@ -8,6 +8,7 @@ import { GuardrailsStudio } from './components/GuardrailsStudio';
 import { EvaluationBenchmarkView } from './components/EvaluationBenchmarkView';
 import { AgentTraceDrawer } from './components/AgentTraceDrawer';
 import { SECStreamView } from './components/SECStreamView';
+import { ObservabilityDisputesView } from './components/ObservabilityDisputesView';
 import type {
   SampleDoc,
   OrchestratorStateResponse,
@@ -24,7 +25,7 @@ import {
 } from './services/api';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'workspace' | 'sec' | 'guardrails' | 'benchmark' | 'trace'>('workspace');
+  const [activeTab, setActiveTab] = useState<'workspace' | 'sec' | 'guardrails' | 'benchmark' | 'trace' | 'observability'>('workspace');
   const [samples, setSamples] = useState<SampleDoc[]>([]);
   const [selectedSampleId, setSelectedSampleId] = useState<string>('apple_10k_fy24.txt');
   const [rawText, setRawText] = useState<string>('');
@@ -234,6 +235,11 @@ export const App: React.FC = () => {
             onRunSuite={handleRunRegressionSuite}
             isLoading={isBenchmarkLoading}
           />
+        )}
+
+        {/* Observability & Disputes Tab */}
+        {activeTab === 'observability' && (
+          <ObservabilityDisputesView />
         )}
 
         {/* LangGraph Trace Tab */}

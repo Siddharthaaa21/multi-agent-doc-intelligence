@@ -108,3 +108,43 @@ export async function fetchSECWatchlist(): Promise<{ watchlist: any[]; recent_in
   return res.json();
 }
 
+export async function fetchMetricsSummary(): Promise<any> {
+  const res = await fetch(`${API_BASE}/metrics/summary`);
+  if (!res.ok) throw new Error('Failed to fetch metrics summary');
+  return res.json();
+}
+
+export async function fetchDisputes(): Promise<{ total: number; resolutions: any[] }> {
+  const res = await fetch(`${API_BASE}/disputes`);
+  if (!res.ok) throw new Error('Failed to fetch dispute resolutions');
+  return res.json();
+}
+
+export async function fetchDisputeMetrics(): Promise<any> {
+  const res = await fetch(`${API_BASE}/disputes/metrics`);
+  if (!res.ok) throw new Error('Failed to fetch dispute metrics');
+  return res.json();
+}
+
+export async function submitDisputeResolution(payload: {
+  job_id: string;
+  metric_name: string;
+  status: string;
+  analyst_id: string;
+  review_notes: string;
+  original_value?: string;
+  corrected_value?: string;
+  source_span?: string;
+}): Promise<any> {
+  const res = await fetch(`${API_BASE}/disputes/resolve`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Dispute resolution failed' }));
+    throw new Error(err.detail || 'Dispute resolution failed');
+  }
+  return res.json();
+}
+

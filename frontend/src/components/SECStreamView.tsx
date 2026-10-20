@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ArrowRight, Loader2, Search } from 'lucide-react';
 import type { SECCompanySummary, SECFilingMetadata } from '../types';
 import { fetchSECTickers, fetchSECFilings, ingestSECFiling, fetchSECWatchlist } from '../services/api';
 
@@ -11,8 +12,6 @@ export const SECStreamView: React.FC<SECStreamViewProps> = ({ onIngestSuccess, l
   const [ticker, setTicker] = useState<string>('AAPL');
   const [supportedTickers, setSupportedTickers] = useState<Array<{ ticker: string; cik: string }>>([]);
   const [companySummary, setCompanySummary] = useState<SECCompanySummary | null>(null);
-  const [watchlist, setWatchlist] = useState<any[]>([]);
-  const [recentIngestions, setRecentIngestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [ingestingAccession, setIngestingAccession] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -32,18 +31,15 @@ export const SECStreamView: React.FC<SECStreamViewProps> = ({ onIngestSuccess, l
     }
   };
 
-  // Load supported tickers, watchlist, and default AAPL filings on mount
   useEffect(() => {
     async function loadInitial() {
       try {
-        const [tickersRes, watchRes, summary] = await Promise.all([
+        const [tickersRes, , summary] = await Promise.all([
           fetchSECTickers(),
           fetchSECWatchlist(),
-          fetchSECFilings('AAPL')
+          fetchSECFilings('AAPL'),
         ]);
         setSupportedTickers(tickersRes);
-        setWatchlist(watchRes.watchlist || []);
-        setRecentIngestions(watchRes.recent_ingestions || []);
         setCompanySummary(summary);
       } catch (err) {
         console.error('Failed to load initial SEC data:', err);
@@ -62,7 +58,7 @@ export const SECStreamView: React.FC<SECStreamViewProps> = ({ onIngestSuccess, l
         form_type: filing.form,
         accession_number: filing.accession_number,
         primary_document: filing.primary_document,
-        llm_provider: llmProvider
+        llm_provider: llmProvider,
       });
       if (res && res.job_id) {
         onIngestSuccess(res.job_id, companySummary?.ticker || ticker, filing.form);
@@ -75,296 +71,135 @@ export const SECStreamView: React.FC<SECStreamViewProps> = ({ onIngestSuccess, l
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* Top Banner / Compliance Protocol */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '12px 18px',
-          background: 'var(--color-bg-card, #131722)',
-          border: '1px solid var(--color-border, #2a2e39)',
-          borderRadius: '4px',
-          fontFamily: 'monospace',
-          fontSize: '12px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
-          <span style={{ fontWeight: 600, color: 'var(--color-text-primary, #e1e7ec)' }}>
-            SEC EDGAR SUBMISSION INGESTION PIPELINE
-          </span>
-          <span style={{ color: 'var(--color-text-secondary, #787b86)' }}>|</span>
-          <span style={{ color: 'var(--color-text-secondary, #787b86)' }}>
-            data.sec.gov API Protocol v1.0
-          </span>
-        </div>
-        <div style={{ display: 'flex', gap: '16px', color: 'var(--color-text-secondary, #787b86)' }}>
-          <span>WATCHLIST: <strong>{watchlist.length > 0 ? watchlist.length : 6} ENTITIES</strong></span>
-          <span>RATE LIMIT: <strong>10 req/s</strong></span>
-          <span>FORMAT: <strong>iXBRL & HTML Tables</strong></span>
-          <span>STATUS: <strong style={{ color: '#10b981' }}>ONLINE</strong></span>
-        </div>
-      </div>
-
-      {/* Ticker Search & Institutional Watchlist Bar */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '14px',
-          padding: '18px',
-          background: 'var(--color-bg-card, #131722)',
-          border: '1px solid var(--color-border, #2a2e39)',
-          borderRadius: '4px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-primary, #e1e7ec)' }}>
-            MONITORED TICKERS:
-          </span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+    <div className="space-y-4">
+      {/* Ticker Search & Filter Bar */}
+      <div className="bg-zinc-900/40 border border-zinc-800/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center space-x-2 flex-wrap gap-y-2">
+          <span className="text-xs font-medium text-zinc-400">Watchlist:</span>
+          <div className="flex items-center space-x-1.5">
             {(supportedTickers.length > 0
               ? supportedTickers.map(t => t.ticker)
-              : ['AAPL', 'NVDA', 'MSFT', 'AMZN', 'TSLA', 'JPM']
-            ).slice(0, 8).map((t) => (
+              : ['AAPL', 'NVDA', 'MSFT', 'AMZN', 'TSLA']
+            ).slice(0, 6).map((t) => (
               <button
                 key={t}
                 onClick={() => handleSearch(t)}
-                style={{
-                  padding: '5px 12px',
-                  background: ticker === t ? '#2563eb' : '#1e222d',
-                  color: ticker === t ? '#ffffff' : '#d1d5db',
-                  border: '1px solid #2a2e39',
-                  borderRadius: '3px',
-                  fontSize: '12px',
-                  fontFamily: 'monospace',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                }}
+                className={`px-2.5 py-1 rounded text-xs font-mono font-medium transition cursor-pointer ${
+                  ticker === t
+                    ? 'bg-zinc-100 text-zinc-950 font-bold'
+                    : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200'
+                }`}
               >
                 {t}
               </button>
             ))}
           </div>
+        </div>
 
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
+        <div className="flex items-center space-x-2">
+          <div className="relative">
             <input
               type="text"
-              placeholder="Search ticker or CIK..."
+              placeholder="Ticker / CIK..."
               value={ticker}
               onChange={(e) => setTicker(e.target.value.toUpperCase())}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch(ticker)}
-              style={{
-                padding: '6px 12px',
-                background: '#0a0d14',
-                border: '1px solid #2a2e39',
-                borderRadius: '3px',
-                color: '#e1e7ec',
-                fontFamily: 'monospace',
-                fontSize: '12px',
-                width: '180px',
-              }}
+              className="bg-zinc-950 border border-zinc-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none focus:border-zinc-700 w-36 uppercase"
             />
-            <button
-              onClick={() => handleSearch(ticker)}
-              disabled={isLoading}
-              style={{
-                padding: '6px 14px',
-                background: '#2563eb',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '3px',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: isLoading ? 'not-allowed' : 'pointer',
-              }}
-            >
-              {isLoading ? 'Querying...' : 'Query EDGAR'}
-            </button>
+            <Search className="h-3.5 w-3.5 text-zinc-500 absolute left-2.5 top-2.5" />
           </div>
-        </div>
-
-        {errorMessage && (
-          <div
-            style={{
-              padding: '10px 14px',
-              background: '#3f1515',
-              border: '1px solid #ef4444',
-              color: '#fca5a5',
-              fontSize: '12px',
-              fontFamily: 'monospace',
-              borderRadius: '3px',
-            }}
+          <button
+            onClick={() => handleSearch(ticker)}
+            disabled={isLoading}
+            className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg text-xs font-medium transition disabled:opacity-50 cursor-pointer"
           >
-            {errorMessage}
-          </div>
-        )}
+            {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Fetch'}
+          </button>
+        </div>
       </div>
 
-      {/* Submissions Result View */}
-      {companySummary && (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            padding: '20px',
-            background: 'var(--color-bg-card, #131722)',
-            border: '1px solid var(--color-border, #2a2e39)',
-            borderRadius: '4px',
-          }}
-        >
-          {/* Header Info */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #2a2e39', paddingBottom: '14px' }}>
-            <div>
-              <div style={{ fontSize: '18px', fontWeight: 700, color: '#f3f4f6', letterSpacing: '-0.01em' }}>
-                {companySummary.company_name}
-              </div>
-              <div style={{ display: 'flex', gap: '16px', marginTop: '6px', fontSize: '12px', fontFamily: 'monospace', color: '#9ca3af' }}>
-                <span>TICKER: <strong style={{ color: '#e5e7eb' }}>{companySummary.ticker}</strong></span>
-                <span>CIK: <strong style={{ color: '#e5e7eb' }}>{companySummary.cik}</strong></span>
-                {companySummary.sic && <span>SIC: <strong style={{ color: '#e5e7eb' }}>{companySummary.sic}</strong></span>}
-                {companySummary.fiscal_year_end && <span>FY END: <strong style={{ color: '#e5e7eb' }}>{companySummary.fiscal_year_end}</strong></span>}
-              </div>
-            </div>
-            <div style={{ fontSize: '12px', color: '#9ca3af', textAlign: 'right', fontFamily: 'monospace' }}>
-              OFFICIAL SEC ARCHIVES DISCOVERY
-            </div>
-          </div>
-
-          {/* Filings Table */}
-          <div>
-            <div style={{ fontSize: '13px', fontWeight: 600, color: '#e5e7eb', marginBottom: '10px' }}>
-              AVAILABLE STATUTORY PERIODIC FILINGS (10-K, 10-Q, 8-K)
-            </div>
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px', textAlign: 'left', fontFamily: 'monospace' }}>
-                <thead>
-                  <tr style={{ background: '#0d1017', borderBottom: '1px solid #2a2e39', color: '#9ca3af' }}>
-                    <th style={{ padding: '8px 12px' }}>FORM</th>
-                    <th style={{ padding: '8px 12px' }}>FILING DATE</th>
-                    <th style={{ padding: '8px 12px' }}>PERIOD END</th>
-                    <th style={{ padding: '8px 12px' }}>ACCESSION NUMBER</th>
-                    <th style={{ padding: '8px 12px' }}>PRIMARY DOCUMENT</th>
-                    <th style={{ padding: '8px 12px', textAlign: 'right' }}>ACTION</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {companySummary.recent_filings.map((f, idx) => {
-                    const isIngesting = ingestingAccession === f.accession_number;
-                    const isForm10K = f.form === '10-K';
-                    const isForm10Q = f.form === '10-Q';
-                    return (
-                      <tr
-                        key={idx}
-                        style={{
-                          borderBottom: '1px solid #1e222d',
-                          background: idx % 2 === 0 ? 'transparent' : '#0d101780',
-                        }}
-                      >
-                        <td style={{ padding: '10px 12px' }}>
-                          <span
-                            style={{
-                              padding: '2px 6px',
-                              borderRadius: '2px',
-                              fontWeight: 700,
-                              fontSize: '11px',
-                              background: isForm10K ? '#064e3b' : isForm10Q ? '#1e3a8a' : '#1f2937',
-                              color: isForm10K ? '#6ee7b7' : isForm10Q ? '#93c5fd' : '#d1d5db',
-                            }}
-                          >
-                            {f.form}
-                          </span>
-                        </td>
-                        <td style={{ padding: '10px 12px', color: '#e5e7eb' }}>{f.filing_date || '—'}</td>
-                        <td style={{ padding: '10px 12px', color: '#9ca3af' }}>{f.report_date || '—'}</td>
-                        <td style={{ padding: '10px 12px', color: '#9ca3af' }}>{f.accession_number}</td>
-                        <td style={{ padding: '10px 12px' }}>
-                          {f.document_url ? (
-                            <a
-                              href={f.document_url}
-                              target="_blank"
-                              rel="noreferrer"
-                              style={{ color: '#60a5fa', textDecoration: 'none' }}
-                            >
-                              {f.primary_document || 'View Doc'} ↗
-                            </a>
-                          ) : (
-                            <span>{f.primary_document || '—'}</span>
-                          )}
-                        </td>
-                        <td style={{ padding: '10px 12px', textAlign: 'right' }}>
-                          <button
-                            onClick={() => handleIngest(f)}
-                            disabled={Boolean(ingestingAccession)}
-                            style={{
-                              padding: '5px 12px',
-                              background: isForm10K || isForm10Q ? '#059669' : '#374151',
-                              color: '#ffffff',
-                              border: 'none',
-                              borderRadius: '3px',
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              cursor: ingestingAccession ? 'not-allowed' : 'pointer',
-                            }}
-                          >
-                            {isIngesting ? 'Ingesting...' : 'Ingest & Orchestrate'}
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
+      {errorMessage && (
+        <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800/50 text-xs text-rose-300 font-mono">
+          {errorMessage}
         </div>
       )}
 
-      {/* Recently Ingested Stream History */}
-      {recentIngestions.length > 0 && (
-        <div
-          style={{
-            padding: '18px',
-            background: 'var(--color-bg-card, #131722)',
-            border: '1px solid var(--color-border, #2a2e39)',
-            borderRadius: '4px',
-          }}
-        >
-          <div style={{ fontSize: '13px', fontWeight: 600, color: '#e5e7eb', marginBottom: '12px' }}>
-            RECENT INSTITUTIONAL EDGAR INGESTION AUDIT LOG
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {recentIngestions.map((item, idx) => (
-              <div
-                key={idx}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '8px 12px',
-                  background: '#0d1017',
-                  border: '1px solid #1e222d',
-                  borderRadius: '3px',
-                  fontSize: '12px',
-                  fontFamily: 'monospace',
-                }}
-              >
-                <div>
-                  <strong style={{ color: '#60a5fa' }}>{item.ticker}</strong> ({item.form}) — {item.company_name}
-                  <span style={{ color: '#6b7280', marginLeft: '10px' }}>Accession: {item.accession_number}</span>
-                </div>
-                <div style={{ display: 'flex', gap: '16px', color: '#9ca3af' }}>
-                  <span>Tables: {item.tables_extracted}</span>
-                  <span style={{ color: '#10b981' }}>Status: {item.status}</span>
-                </div>
+      {/* Submissions Result View */}
+      {companySummary && (
+        <div className="bg-zinc-900/40 border border-zinc-800/80 rounded-xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-zinc-800/60 flex items-center justify-between">
+            <div>
+              <div className="flex items-center space-x-2">
+                <h3 className="text-sm font-semibold text-white">
+                  {companySummary.company_name}
+                </h3>
+                <span className="text-xs font-mono text-zinc-400">
+                  ({companySummary.ticker})
+                </span>
+                <span className="text-[11px] font-mono text-zinc-500">
+                  CIK: {companySummary.cik}
+                </span>
               </div>
-            ))}
+            </div>
+            <div className="text-[11px] font-mono text-zinc-500">
+              SEC EDGAR Feed
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs font-mono">
+              <thead className="bg-zinc-950/60 text-zinc-400 border-b border-zinc-800/60 text-[11px]">
+                <tr>
+                  <th className="py-2.5 px-4 font-normal">Form</th>
+                  <th className="py-2.5 px-4 font-normal">Filing Date</th>
+                  <th className="py-2.5 px-4 font-normal">Period End</th>
+                  <th className="py-2.5 px-4 font-normal">Document Accession</th>
+                  <th className="py-2.5 px-4 font-normal text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800/40 text-zinc-300">
+                {companySummary.recent_filings.map((filing) => (
+                  <tr key={filing.accession_number} className="hover:bg-zinc-800/20 transition-colors">
+                    <td className="py-3 px-4 font-bold text-zinc-100">
+                      {filing.form}
+                    </td>
+                    <td className="py-3 px-4 text-zinc-400">
+                      {filing.filing_date}
+                    </td>
+                    <td className="py-3 px-4 text-zinc-500">
+                      {filing.report_date || '—'}
+                    </td>
+                    <td className="py-3 px-4 text-zinc-500 font-mono text-[11px]">
+                      {filing.accession_number}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <button
+                        onClick={() => handleIngest(filing)}
+                        disabled={ingestingAccession === filing.accession_number}
+                        className="inline-flex items-center space-x-1.5 px-3 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition disabled:opacity-50 cursor-pointer"
+                      >
+                        {ingestingAccession === filing.accession_number ? (
+                          <>
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                            <span>Importing...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Analyze in Workspace</span>
+                            <ArrowRight className="h-3 w-3" />
+                          </>
+                        )}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
     </div>
   );
 };
+
+export default SECStreamView;
